@@ -17,30 +17,30 @@ This repository aims to provide clear and efficient implementations of fundament
 
 ## Implemented Data Structures
 
-- [ ] Linked List
-- [ ] Stack
-- [ ] Queue
-- [ ] Binary Tree
-- [ ] AVL Tree
-- [ ] RB BST
-- [ ] B-Tree
-- [ ] More coming soon...
+- ⬜ Linked List
+- ⬜ Stack
+- ⬜ Queue
+- ⬜ Binary Tree
+- ✅ AVL Tree
+- ⬜ RB BST
+- ⬜ B-Tree
+- ⬜ More coming soon...
 
 ## Implemented Algorithms
 
-- [ ] Sorting Algorithms
-  - [ ] Bubble Sort
-  - [ ] Merge Sort
-  - [ ] Quick Sort
-- [ ] Search Algorithms
-  - [ ] Binary Search
-  - [ ] Depth-First Search (DFS)
-  - [ ] Breadth-First Search (BFS)
-- [ ] Dynamic Programming
-- [ ] Graph Algorithms
-  - [ ] Dijkstra's Algorithm
-  - [ ] Kruskal's Algorithm
-- [ ] More coming soon...
+- ⬜ Sorting Algorithms
+  - ⬜ Bubble Sort
+  - ⬜ Merge Sort
+  - ⬜ Quick Sort
+- ⬜ Search Algorithms
+  - ⬜ Binary Search
+  - ⬜ Depth-First Search (DFS)
+  - ⬜ Breadth-First Search (BFS)
+- ⬜ Dynamic Programming
+- ⬜ Graph Algorithms
+  - ⬜ Dijkstra's Algorithm
+  - ⬜ Kruskal's Algorithm
+- ⬜ More coming soon...
 
 ## Getting Started
 
