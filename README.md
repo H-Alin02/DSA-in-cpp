@@ -13,7 +13,9 @@ which I developed during my DSA course at the university.
 
 ## Overview
 
-This repository aims to provide clear and efficient implementations of fundamental data structures and algorithms. Each implementation is contained in its own folder, with a header file (`.h`), source file (`.cpp`), and a test file (`main.cpp` or similar) where applicable.
+This repository aims to provide implementations of fundamental data structures and algorithms. 
+Each implementation is contained in its own folder, with a header file (`.h`), source file (`.cpp`), 
+and a test file (`main.cpp` or similar) where applicable.
 
 ## Implemented Data Structures
 
