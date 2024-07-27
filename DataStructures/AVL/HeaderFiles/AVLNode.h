@@ -8,10 +8,10 @@ class AVLNode{
         AVLNode* right;
         int height;
 
-        // Costruttore
+        // Constructor
         AVLNode(int k) : key(k), left(nullptr), right(nullptr), height(1){}
 
-        // Distruttore
+        // Destructor
         ~AVLNode(){}
 };
 

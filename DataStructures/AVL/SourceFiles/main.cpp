@@ -28,6 +28,7 @@ int main() {
                 cout << "Enter value to delete: ";
                 cin >> value;
                 avlTree.deleteKey(value);
+                avlTree.printTree();
                 break;
             case 3:
                 cout << "Enter value to search: ";
