@@ -9,10 +9,10 @@ class BSTNode{
         BSTNode* right;
         int height;
 
-        // Costruttore
+        // Constructor
         BSTNode(int k) : key(k), left(nullptr), right(nullptr), height(1){}
 
-        // Distruttore
+        // Destructor
         ~BSTNode(){}
 
 };

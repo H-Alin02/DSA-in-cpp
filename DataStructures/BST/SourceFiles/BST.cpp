@@ -11,10 +11,10 @@ void BST::insert(int key){
 }
 
 BSTNode* BST::insert(BSTNode* node, int key){
-    // Caso base: albero vuoto
+    // empty tree
     if(!node) return new BSTNode(key);
 
-    // Ricerca del sottoalbero adeguato
+    // Finding the right place to insert
     if(key < node->key)
         node->left = insert(node->left,key);
     else if(key > node->key)
@@ -31,36 +31,37 @@ void BST::deleteKey(int key){
 }
 
 BSTNode* BST::deleteNode(BSTNode* node, int key){
-    // Caso base: albero vuoto
+    // empty tree
     if(!node) return node;
 
-    // Ricerca del nodo da cancellare
+    // Find node to delete
     if(key < node->key)
         node->left = deleteNode(node->left,key);
     else if(key > node->key)
         node->right = deleteNode(node->right,key);
-    else { //Chiave trovata
+    else { // key found
         if(!node->left || !node->right){
             BSTNode* tmp = node->left ? node->left : node->right;
             if(!tmp){ 
-                //Caso foglia
+                // Leaf
                 tmp = node;
                 node = nullptr;
             }else{
-                // Singolo figlio
+                // Single child
                 *node = *tmp;
             }
 
             delete tmp;
         }else{
-            //Caso nodo con due figli
+            // Two children
             BSTNode* tmp = minValueNode(node->right);
             node->key = tmp->key;
             node->right = deleteNode(node->right, tmp->key);
         }
     }
 
-    if(!node) return node; // caso in cui il nodo corrente sia stato eliminato
+    // if the current node is deleted
+    if(!node) return node;
 
     return node;
 }
@@ -115,15 +116,15 @@ void BST::printTree() const {
 void BST::printTree(BSTNode* node, int depth) const {
    if (node == nullptr) return;
 
-    // Sottoalbero destro
+    // Right subtree
     printTree(node->right, depth + 1);
 
-    // stampa depth volte un TAB
+    // Print identation and the key
     for (int i = 0; i < depth; ++i) {
-        cout << "\t"; // Indentazione
+        cout << "\t";
     }
     cout << node->key << endl;
 
-    // Sottoalbero sinistro
+    // Left subtree
     printTree(node->left, depth + 1);
 }
