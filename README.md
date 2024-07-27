@@ -22,7 +22,7 @@ and a test file (`main.cpp` or similar) where applicable.
 - ⬜ Linked List
 - ⬜ Stack
 - ⬜ Queue
-- ⬜ Binary Tree
+- ✅ Binary Search Tree
 - ✅ AVL Tree
 - ⬜ RB BST
 - ⬜ B-Tree
@@ -53,7 +53,7 @@ To use the code in this repository, you need to have a C++ compiler (GCC) instal
 To get a local copy of the repository, run:
 
 ```bash
-git clone https://github.com/yourusername/dsa-cpp.git
+git clone https://github.com/H-Alin02/DSA-in-cpp.git
 cd dsa-cpp
 ```
 ## Building and Running
