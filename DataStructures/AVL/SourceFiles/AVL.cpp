@@ -13,10 +13,10 @@ void AVL::insert(int key){
 }
 
 AVLNode* AVL::insert(AVLNode* node, int key){
-    // Caso base: albero vuoto
+    // empty tree
     if(!node) return new AVLNode(key);
 
-    // Ricerca del sottoalbero adeguato
+    // Finding the right place to insert
     if(key < node->key)
         node->left = insert(node->left,key);
     else if(key > node->key)
@@ -55,36 +55,37 @@ void AVL::deleteKey(int key){
 }
 
 AVLNode* AVL::deleteNode(AVLNode* node, int key){
-    // Caso base: albero vuoto
+    // empty tree
     if(!node) return node;
 
-    // Ricerca del nodo da cancellare
+    // Find node to delete
     if(key < node->key)
         node->left = deleteNode(node->left,key);
     else if(key > node->key)
         node->right = deleteNode(node->right,key);
-    else { //Chiave trovata
+    else { // key found
         if(!node->left || !node->right){
             AVLNode* tmp = node->left ? node->left : node->right;
             if(!tmp){ 
-                //Caso foglia
+                // Leaf
                 tmp = node;
                 node = nullptr;
             }else{
-                // Singolo figlio
+                // Single child
                 *node = *tmp;
             }
 
             delete tmp;
         }else{
-            //Caso nodo con due figli
+            // Two children
             AVLNode* tmp = minValueNode(node->right);
             node->key = tmp->key;
             node->right = deleteNode(node->right, tmp->key);
         }
     }
 
-    if(!node) return node; // caso in cui il nodo corrente sia stato eliminato
+    // if the current node is deleted       
+    if(!node) return node;
 
     // updateHeight
     updateHeight(root);
@@ -190,21 +191,24 @@ void AVL::deleteTree(AVLNode* node){
 }
 
 void AVL::printTree() const {
+    cout<<"\n\n-----------------------------\n\n";
     printTree(root, 0);
+    cout<<"\n-------------------------------\n\n";
+
 }
 
 void AVL::printTree(AVLNode* node, int depth) const {
    if (node == nullptr) return;
 
-    // Sottoalbero destro
+    // Right subtree
     printTree(node->right, depth + 1);
 
-    // stampa depth volte un TAB
+    // Print identation and the key
     for (int i = 0; i < depth; ++i) {
         cout << "\t"; // Indentazione
     }
     cout << node->key << endl;
 
-    // Sottoalbero sinistro
+    // Left subtree
     printTree(node->left, depth + 1);
 }
