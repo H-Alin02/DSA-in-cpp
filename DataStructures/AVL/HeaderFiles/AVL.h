@@ -4,222 +4,127 @@
 #include "AVLNode.h"
 #include <iomanip>
 #include <iostream>
+#include "../../BST/HeaderFiles/BST.h"
 using namespace std;
 
 template<typename T>
-class AVL{
+class AVL : public BST<T>{
     
     public:
-        AVL(): root(nullptr){}
-        ~AVL() { deleteTree(root); }
+        AVL(): BST<T>(){}
+        ~AVL() {}
 
-        void insert(int key){
-            root = insert(root,key);
-        }
-
-        void deleteKey(int key){
-            root = deleteNode(root,key);
-        }
-        
-        bool search(int key) const{
-            AVLNode<T>* current = root;
-            while(current){
-                if(key == current->key)
-                    return true;
-                else if(key < current->key)
-                    current = current->left;
-                current = current->right;
-            }
-            return false;
-        }
-        
-        void printInOrder() const{
-            inOrderTraversal(root);
-            cout << "\n\n";
-        }
-        
-        void printTree() const{
-            cout<<"\n\n-----------------------------\n\n";
-            printTree(root, 0);
-            cout<<"\n-------------------------------\n\n";
-        }
-
-    private: 
-        AVLNode<T>* root;
-        
-        AVLNode<T>* insert(AVLNode<T>* node, int key){
-            // empty tree
-            if(!node) return new AVLNode<T>(key);
-
-            // Finding the right place to insert
-            if(key < node->key)
-                node->left = insert(node->left,key);
-            else if(key > node->key)
-                node->right = insert(node->right,key);
-            else {
-                return node; 
-            }
-
-            // updateHeight
-            updateHeight(node);
-
-            // Balance controll and Rotation
-            int balance = getBalance(node);
-
-            if (balance > 1 && key < node->left->key)
-                return rotateRight(node);
-
-            if (balance < -1 && key > node->right->key)
-                return rotateLeft(node);
-
-            if (balance > 1 && key > node->left->key) {
-                node->left = rotateLeft(node->left);
-                return rotateRight(node);
-            }
-
-            if (balance < -1 && key < node->right->key) {
-                node->right = rotateRight(node->right);
-                return rotateLeft(node);
+    void insert(T key) override {
+        this->root = insert(static_cast<AVLNode<T>*>(this->root), key);
     }
 
-    return node;
-        }
-        
-        AVLNode<T>* deleteNode(AVLNode<T>* node, int key){
-             // empty tree
-            if(!node) return node;
+    void deleteKey(T key) override {
+        this->root = deleteNode(static_cast<AVLNode<T>*>(this->root), key);
+    }
 
-            // Find node to delete
-            if(key < node->key)
-                node->left = deleteNode(node->left,key);
-            else if(key > node->key)
-                node->right = deleteNode(node->right,key);
-            else { // key found
-                if(!node->left || !node->right){
-                    AVLNode<T>* tmp = node->left ? node->left : node->right;
-                    if(!tmp){ 
-                        // Leaf
-                        tmp = node;
-                        node = nullptr;
-                    }else{
-                        // Single child
-                        *node = *tmp;
-                    }
+private:
+    AVLNode<T>* insert(AVLNode<T>* node, T key) {
+        // Inserimento come BST
+        if (!node) return new AVLNode<T>(key);
 
-                    delete tmp;
-                }else{
-                    // Two children
-                    AVLNode<T>* tmp = minValueNode(node->right);
-                    node->key = tmp->key;
-                    node->right = deleteNode(node->right, tmp->key);
-                }
-            }
-
-            // if the current node is deleted       
-            if(!node) return node;
-
-            // updateHeight
-            updateHeight(root);
-
-            // Balance controll and Rotation
-            int balance = getBalance(root);
-
-            if (balance > 1 && getBalance(root->left) >= 0)
-                return rotateRight(root);
-
-            if (balance > 1 && getBalance(root->left) < 0) {
-                root->left = rotateLeft(root->left);
-                return rotateRight(root);
-            }
-
-            if (balance < -1 && getBalance(root->right) <= 0)
-                return rotateLeft(root);
-
-            if (balance < -1 && getBalance(root->right) > 0) {
-                root->right = rotateRight(root->right);
-                return rotateLeft(root);
-            }
-
+        if (key < node->key)
+            node->left = insert(static_cast<AVLNode<T>*>(node->left), key);
+        else if (key > node->key)
+            node->right = insert(static_cast<AVLNode<T>*>(node->right), key);
+        else
             return node;
-        }
-        
-        AVLNode<T>* minValueNode(AVLNode<T>* node){
-            AVLNode<T>* current = node;
-            while(current && current->left){
-                current = current->left;
-            }
-            return current;
-        }
-        
-        AVLNode<T>* rotateLeft(AVLNode<T>* x){
-            AVLNode<T>* y = x->right;
-            AVLNode<T>* T2 = y->left;
 
-            y->left = x;
-            x->right = T2;
+        // Aggiorna altezza e bilancia
+        updateHeight(node);
+        return balance(node);
+    }
 
-            updateHeight(x);
-            updateHeight(y);
+    AVLNode<T>* deleteNode(AVLNode<T>* node, T key) {
+        if (!node) return node;
 
-            return y;
-        }
-        
-        AVLNode<T>* rotateRight(AVLNode<T>* y){
-            AVLNode<T>* x = y->left;
-            AVLNode<T>* T2 = x->right;
-
-            x->right = y;
-            y->left = T2;
-
-            updateHeight(y);
-            updateHeight(x);
-
-            return x;
-        }
-        
-        int getHeight(AVLNode<T>* node) const{
-            return node? node->height : 0;
-        }
-        
-        int getBalance(AVLNode<T>* node) const{
-            return node ? getHeight(node->left) - getHeight(node->right): 0;
-        }
-        
-        void updateHeight(AVLNode<T>* node){
-            node->height = 1 + max(getHeight(node->left), getHeight(node->right));
-        }
-        
-        void inOrderTraversal(AVLNode<T>* node) const{
-            if(node){
-            inOrderTraversal(node->left);
-            cout << node->key << " -> ";
-            inOrderTraversal(node->right);
+        if (key < node->key)
+            node->left = deleteNode(static_cast<AVLNode<T>*>(node->left), key);
+        else if (key > node->key)
+            node->right = deleteNode(static_cast<AVLNode<T>*>(node->right), key);
+        else {
+            // Nodo trovato
+            if (!node->left || !node->right) {
+                AVLNode<T>* temp = node->left ? static_cast<AVLNode<T>*>(node->left) : static_cast<AVLNode<T>*>(node->right);
+                if (!temp) {
+                    temp = node;
+                    node = nullptr;
+                } else {
+                    *node = *temp;
+                }
+                delete temp;
+            } else {
+                AVLNode<T>* temp = static_cast<AVLNode<T>*>(this->minValueNode(static_cast<AVLNode<T>*>(node->right)));
+                node->key = temp->key;
+                node->right = deleteNode(static_cast<AVLNode<T>*>(node->right), temp->key);
             }
         }
-        
-        void deleteTree(AVLNode<T>* node){
-            if(!node) return;
-            deleteTree(node->left);
-            deleteTree(node->right);
-            delete node;
+
+        if (!node) return node;
+
+        updateHeight(node);
+        return balance(node);
+    }
+
+    AVLNode<T>* balance(AVLNode<T>* node) {
+        int balance = getBalance(node);
+
+        if (balance > 1) {
+            if (getBalance(static_cast<AVLNode<T>*>(node->left)) < 0)
+                node->left = rotateLeft(static_cast<AVLNode<T>*>(node->left));
+            return rotateRight(node);
         }
-        
-        void printTree(AVLNode<T>* node, int depth) const{
-            if (node == nullptr) return;
 
-            // Right subtree
-            printTree(node->right, depth + 1);
-
-            // Print identation and the key
-            for (int i = 0; i < depth; ++i) {
-                cout << "\t"; // Indentazione
-            }
-            cout << node->key << endl;
-
-            // Left subtree
-            printTree(node->left, depth + 1);
+        if (balance < -1) {
+            if (getBalance(static_cast<AVLNode<T>*>(node->right)) > 0)
+                node->right = rotateRight(static_cast<AVLNode<T>*>(node->right));
+            return rotateLeft(node);
         }
-    
+
+        return node;
+    }
+
+    int getHeight(AVLNode<T>* node) const {
+        return node ? node->height : 0;
+    }
+
+    int getBalance(AVLNode<T>* node) const {
+        return node ? getHeight(static_cast<AVLNode<T>*>(node->left)) - getHeight(static_cast<AVLNode<T>*>(node->right)) : 0;
+    }
+
+    void updateHeight(AVLNode<T>* node) {
+        node->height = 1 + max(getHeight(static_cast<AVLNode<T>*>(node->left)), getHeight(static_cast<AVLNode<T>*>(node->right)));
+    }
+
+    AVLNode<T>* rotateLeft(AVLNode<T>* x) {
+        AVLNode<T>* y = static_cast<AVLNode<T>*>(x->right);
+        AVLNode<T>* T2 = static_cast<AVLNode<T>*>(y->left);
+
+        y->left = x;
+        x->right = T2;
+
+        updateHeight(x);
+        updateHeight(y);
+
+        return y;
+    }
+
+    AVLNode<T>* rotateRight(AVLNode<T>* y) {
+        AVLNode<T>* x = static_cast<AVLNode<T>*>(y->left);
+        AVLNode<T>* T2 = static_cast<AVLNode<T>*>(x->right);
+
+        x->right = y;
+        y->left = T2;
+
+        updateHeight(y);
+        updateHeight(x);
+
+        return x;
+    }
 };
 
 #endif

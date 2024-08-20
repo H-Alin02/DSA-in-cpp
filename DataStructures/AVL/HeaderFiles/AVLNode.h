@@ -1,16 +1,14 @@
 #ifndef _AVLNODE_
 #define _AVLNODE_
+#include "../../BST/HeaderFiles/BSTNode.h"
 
 template <typename T>
-class AVLNode{
+class AVLNode : public BSTNode<T>{
     public:
-        T key;
-        AVLNode<T>* left;
-        AVLNode<T>* right;
         int height;
 
         // Constructor
-        AVLNode(T k) : key(k), left(nullptr), right(nullptr), height(1){}
+        AVLNode(T k) : BSTNode<T>(k), height(1) {}
 
         // Destructor
         ~AVLNode(){}
