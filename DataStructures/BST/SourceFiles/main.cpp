@@ -1,5 +1,4 @@
 #include "../HeaderFiles/BST.h"
-#include "BST.cpp"
 #include <iostream>
 
 int main() {
