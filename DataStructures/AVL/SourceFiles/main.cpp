@@ -1,5 +1,4 @@
 #include "../HeaderFiles/AVL.h"
-#include "AVL.cpp"
 #include <iostream>
 
 int main() {
