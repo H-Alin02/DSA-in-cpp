@@ -1,10 +1,11 @@
 #include "../HeaderFiles/AVL.h"
 #include <iostream>
+#define dataType char
 
 int main() {
-    AVL avlTree;
+    AVL<dataType> avlTree;
     int choice;
-    int value;
+    dataType value;
 
     do {
         cout << "Menu:\n";

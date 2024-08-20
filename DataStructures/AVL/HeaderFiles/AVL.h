@@ -6,6 +6,7 @@
 #include <iostream>
 using namespace std;
 
+template<typename T>
 class AVL{
     
     public:
@@ -21,7 +22,7 @@ class AVL{
         }
         
         bool search(int key) const{
-            AVLNode* current = root;
+            AVLNode<T>* current = root;
             while(current){
                 if(key == current->key)
                     return true;
@@ -44,11 +45,11 @@ class AVL{
         }
 
     private: 
-        AVLNode* root;
+        AVLNode<T>* root;
         
-        AVLNode* insert(AVLNode* node, int key){
+        AVLNode<T>* insert(AVLNode<T>* node, int key){
             // empty tree
-            if(!node) return new AVLNode(key);
+            if(!node) return new AVLNode<T>(key);
 
             // Finding the right place to insert
             if(key < node->key)
@@ -84,7 +85,7 @@ class AVL{
     return node;
         }
         
-        AVLNode* deleteNode(AVLNode* node, int key){
+        AVLNode<T>* deleteNode(AVLNode<T>* node, int key){
              // empty tree
             if(!node) return node;
 
@@ -95,7 +96,7 @@ class AVL{
                 node->right = deleteNode(node->right,key);
             else { // key found
                 if(!node->left || !node->right){
-                    AVLNode* tmp = node->left ? node->left : node->right;
+                    AVLNode<T>* tmp = node->left ? node->left : node->right;
                     if(!tmp){ 
                         // Leaf
                         tmp = node;
@@ -108,7 +109,7 @@ class AVL{
                     delete tmp;
                 }else{
                     // Two children
-                    AVLNode* tmp = minValueNode(node->right);
+                    AVLNode<T>* tmp = minValueNode(node->right);
                     node->key = tmp->key;
                     node->right = deleteNode(node->right, tmp->key);
                 }
@@ -142,17 +143,17 @@ class AVL{
             return node;
         }
         
-        AVLNode* minValueNode(AVLNode* node){
-            AVLNode* current = node;
+        AVLNode<T>* minValueNode(AVLNode<T>* node){
+            AVLNode<T>* current = node;
             while(current && current->left){
                 current = current->left;
             }
             return current;
         }
         
-        AVLNode* rotateLeft(AVLNode* x){
-            AVLNode* y = x->right;
-            AVLNode* T2 = y->left;
+        AVLNode<T>* rotateLeft(AVLNode<T>* x){
+            AVLNode<T>* y = x->right;
+            AVLNode<T>* T2 = y->left;
 
             y->left = x;
             x->right = T2;
@@ -163,9 +164,9 @@ class AVL{
             return y;
         }
         
-        AVLNode* rotateRight(AVLNode* y){
-            AVLNode* x = y->left;
-            AVLNode* T2 = x->right;
+        AVLNode<T>* rotateRight(AVLNode<T>* y){
+            AVLNode<T>* x = y->left;
+            AVLNode<T>* T2 = x->right;
 
             x->right = y;
             y->left = T2;
@@ -176,19 +177,19 @@ class AVL{
             return x;
         }
         
-        int getHeight(AVLNode* node) const{
+        int getHeight(AVLNode<T>* node) const{
             return node? node->height : 0;
         }
         
-        int getBalance(AVLNode* node) const{
+        int getBalance(AVLNode<T>* node) const{
             return node ? getHeight(node->left) - getHeight(node->right): 0;
         }
         
-        void updateHeight(AVLNode* node){
+        void updateHeight(AVLNode<T>* node){
             node->height = 1 + max(getHeight(node->left), getHeight(node->right));
         }
         
-        void inOrderTraversal(AVLNode* node) const{
+        void inOrderTraversal(AVLNode<T>* node) const{
             if(node){
             inOrderTraversal(node->left);
             cout << node->key << " -> ";
@@ -196,14 +197,14 @@ class AVL{
             }
         }
         
-        void deleteTree(AVLNode* node){
+        void deleteTree(AVLNode<T>* node){
             if(!node) return;
             deleteTree(node->left);
             deleteTree(node->right);
             delete node;
         }
         
-        void printTree(AVLNode* node, int depth) const{
+        void printTree(AVLNode<T>* node, int depth) const{
             if (node == nullptr) return;
 
             // Right subtree
