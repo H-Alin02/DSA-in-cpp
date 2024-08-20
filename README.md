@@ -24,8 +24,14 @@ and a test file (`main.cpp` or similar) where applicable.
 - ⬜ Queue
 - ✅ Binary Search Tree
 - ✅ AVL Tree
+- ⬜ 2-3 Tree
 - ⬜ RB BST
+- ⬜ SPLAY Tree
 - ⬜ B-Tree
+- ⬜ Trie
+- ⬜ PATRICIA tree
+- ⬜ Ternary Search Trie
+- ⬜ Graph
 - ⬜ More coming soon...
 
 ## Implemented Algorithms
@@ -34,6 +40,8 @@ and a test file (`main.cpp` or similar) where applicable.
   - ⬜ Bubble Sort
   - ⬜ Merge Sort
   - ⬜ Quick Sort
+- ⬜ String Sorting
+  - ⬜ KMP
 - ⬜ Search Algorithms
   - ⬜ Binary Search
   - ⬜ Depth-First Search (DFS)
