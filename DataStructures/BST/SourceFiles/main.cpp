@@ -1,10 +1,11 @@
 #include "../HeaderFiles/BST.h"
 #include <iostream>
+#define dataType char
 
 int main() {
-    BST bstTree;
+    BST<dataType> bstTree;
     int choice;
-    int value;
+    dataType value;
 
     do {
         cout << "Menu:\n";

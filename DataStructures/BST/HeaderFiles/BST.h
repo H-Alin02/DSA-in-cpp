@@ -7,22 +7,23 @@
 using namespace std;
 
 // Binary Search Tree
+template<typename T>
 class BST{
     
     public:
         BST() : root(nullptr) {}
         ~BST() { deleteTree(root);}
 
-        virtual void insert(int key){
+        virtual void insert(T key){
             root = insert(root,key);
         }
 
-        virtual void deleteKey(int key){
+        virtual void deleteKey(T key){
             root = deleteNode(root,key);
         }
 
-        bool search(int key) const{
-            BSTNode* current = root;
+        bool search(T key) const{
+            BSTNode<T>* current = root;
             while(current){
                 if(key == current->key)
                     return true;
@@ -45,25 +46,25 @@ class BST{
         }
 
     protected: 
-        BSTNode* root;
+        BSTNode<T>* root;
         
-        virtual BSTNode* insert(BSTNode* node, int key){
+        virtual BSTNode<T>* insert(BSTNode<T>* node, T key){
             // empty tree
-            if(!node) return new BSTNode(key);
+            if (!node) return new BSTNode<T>(key);
 
             // Finding the right place to insert
-            if(key < node->key)
-                node->left = insert(node->left,key);
-            else if(key > node->key)
-                node->right = insert(node->right,key);
-            else {
-                return node; 
+            if (key < node->key) {
+                node->left = insert(node->left, key);
+            } else if (key > node->key) {
+                node->right = insert(node->right, key);
+            } else {
+                return node;
             }
 
             return node;
         }
 
-        virtual BSTNode* deleteNode(BSTNode* node, int key){
+        virtual BSTNode<T>* deleteNode(BSTNode<T>* node, T key){
             // empty tree
             if(!node) return node;
 
@@ -74,7 +75,7 @@ class BST{
                 node->right = deleteNode(node->right,key);
             else { // key found
                 if(!node->left || !node->right){
-                    BSTNode* tmp = node->left ? node->left : node->right;
+                    BSTNode<T>* tmp = node->left ? node->left : node->right;
                     if(!tmp){ 
                         // Leaf
                         tmp = node;
@@ -87,7 +88,7 @@ class BST{
                     delete tmp;
                 }else{
                     // Two children
-                    BSTNode* tmp = minValueNode(node->right);
+                    BSTNode<T>* tmp = minValueNode(node->right);
                     node->key = tmp->key;
                     node->right = deleteNode(node->right, tmp->key);
                 }
@@ -99,15 +100,15 @@ class BST{
             return node;
         }
 
-        BSTNode* minValueNode(BSTNode* node){
-            BSTNode* current = node;
+        BSTNode<T>* minValueNode(BSTNode<T>* node){
+            BSTNode<T>* current = node;
             while(current && current->left){
                 current = current->left;
             }
             return current;
         }
 
-        void inOrderTraversal(BSTNode* node) const{
+        void inOrderTraversal(BSTNode<T>* node) const{
             if(node){
             inOrderTraversal(node->left);
             cout << node->key << " -> ";
@@ -115,14 +116,14 @@ class BST{
             }
         }
 
-        void deleteTree(BSTNode* node){
+        void deleteTree(BSTNode<T>* node){
             if(!node) return;
             deleteTree(node->left);
             deleteTree(node->right);
             delete node;
         }
 
-        void printTree(BSTNode* node, int depth) const{
+        void printTree(BSTNode<T>* node, int depth) const{
             if (node == nullptr) return;
 
             // Right subtree
