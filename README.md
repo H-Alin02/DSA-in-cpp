@@ -28,7 +28,7 @@ and a test file (`main.cpp` or similar) where applicable.
 - ⬜ RB BST
 - ⬜ SPLAY Tree
 - ⬜ B-Tree
-- ⬜ Trie
+- ✅ Trie
 - ⬜ PATRICIA tree
 - ⬜ Ternary Search Trie
 - ⬜ Graph
