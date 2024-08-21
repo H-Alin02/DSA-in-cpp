@@ -13,7 +13,8 @@ int main(){
         cout << "1. Insert\n";
         cout << "2. Delete\n";
         cout << "3. Search\n";
-        cout << "4. Exit\n";
+        cout << "4. Print Trie\n";
+        cout << "5. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
         cin.ignore();
@@ -23,12 +24,14 @@ int main(){
                 cout << "Enter word to insert: ";
                 getline(cin,word);
                 trie.insert(word);
+                trie.print();
                 break;
             case 2:
                 cout << "Enter word to delete: ";
                 getline(cin,word);
                 cout << "Query String: " << word << "\n";
                 if (trie.delete_key(word)) {
+                    trie.print();
                     cout << "\nThe query string is successfully deleted\n";
                 }
                 else {
@@ -47,13 +50,17 @@ int main(){
                 }
                 break;
             case 4:
+                trie.print();
+                break;
+            case 5:
                 cout << "Exiting...\n";
                 break;
             default:
-                cout << "Invalid choice! Please enter a number between 1 and 4.\n";
+                cout << "Invalid choice! Please enter a number between 1 and 5.\n";
                 break;
         }
-    } while (choice != 4);
+    } while (choice != 5);
+
 
     return 0;
 }
