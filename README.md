@@ -14,10 +14,14 @@ which I developed during my DSA course at the university.
 ## Overview
 
 This repository aims to provide implementations of fundamental data structures and algorithms. 
-Each implementation is contained in its own folder, with a header file (`.h`), source file (`.cpp`), 
+Each implementation is contained in its own folder, with a header file (`.h`), in some cases a source file (`.cpp`), 
 and a test file (`main.cpp` or similar) where applicable.
 
 ## Implemented Data Structures
+
+⬜: not implemented;
+🛠️: work in progress;
+✅: implemented;
 
 - ⬜ Linked List
 - ⬜ Stack
@@ -31,7 +35,7 @@ and a test file (`main.cpp` or similar) where applicable.
 - ✅ Trie
 - ⬜ PATRICIA tree
 - ⬜ Ternary Search Trie
-- ⬜ Graph
+- 🛠️ Graph
 - ⬜ More coming soon...
 
 ## Implemented Algorithms
@@ -41,15 +45,22 @@ and a test file (`main.cpp` or similar) where applicable.
   - ⬜ Merge Sort
   - ⬜ Quick Sort
 - ⬜ String Sorting
-  - ⬜ KMP
+  - ⬜ String Quicksort (3-way Quicksort)
+  - ⬜ Radix Sort (LDS and MSD)
+-  ⬜  Pattern Matching
+  - 🛠️  Naive
+  - ✅ KMP
 - ⬜ Search Algorithms
   - ⬜ Binary Search
-  - ⬜ Depth-First Search (DFS)
-  - ⬜ Breadth-First Search (BFS)
+  -  🛠️  Depth-First Search (DFS)
+  -  🛠️  Breadth-First Search (BFS)
 - ⬜ Dynamic Programming
 - ⬜ Graph Algorithms
   - ⬜ Dijkstra's Algorithm
   - ⬜ Kruskal's Algorithm
+  - ⬜ Topological sorting
+    - ⬜ Kahn's Algorithm
+    - ⬜ DFS Based Algorithm
 - ⬜ More coming soon...
 
 ## Getting Started
