@@ -18,10 +18,7 @@ Each implementation is contained in its own folder, with a header file (`.h`), i
 and a test file (`main.cpp` or similar) where applicable.
 
 ## Implemented Data Structures
-
-⬜: not implemented;
-🛠️: work in progress;
-✅: implemented;
+⬜: not implemented, 🛠️: work in progress, ✅: implemented;
 
 - ⬜ Linked List
 - ⬜ Stack
