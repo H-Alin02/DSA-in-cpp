@@ -70,7 +70,7 @@ class KMP_PatternMatching : public PatternMatching {
                 std::cout << std::endl;
             }
 
-            cout << "\n\n";
+            cout << "\n";
         }
     
     public:
@@ -95,14 +95,15 @@ class KMP_PatternMatching : public PatternMatching {
             int i, j;
             vector<int> result;
 
-            for(i = 0, j = 0; i < n && j < m; i++){
+            for(i = 0, j = 0; i < n; ++i){
                 j = DFA[find(alpha, text[i])][j];
                 if(j == m){ 
                     result.push_back(i-m+1);
                     j = 0;
+                    j = DFA[find(alpha, text[i])][j];
                 }
             }
-            
+
             return result;
         }
 };

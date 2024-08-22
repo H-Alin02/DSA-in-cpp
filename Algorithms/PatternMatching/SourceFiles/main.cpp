@@ -7,17 +7,21 @@ int main(){
 
     PatternMatching* obj = new KMP_PatternMatching(alphabet);
 
-    cout << obj->simpleSearch("abbabaaba", pattern) << endl;
+    cout << "Simple search : \n" << obj->simpleSearch("abbababa", pattern) << "\n\n";
 
-    vector result = obj->multiIndexSearch("abbabaaba", pattern);
+    vector<int> result = obj->multiIndexSearch("abbababa", pattern);
+    cout << "Text: " << "abbababa" << "\nPattern: " << pattern << "\n";
+    cout << "Pattern found at indexes: ";
     for (auto i : result) cout << i << " ";
-    cout << endl;
+    cout << "\n\n";
 
-    /*obj->search("ababacababac","aaaaaa");
-    obj->search("ababacababac","aacaaab");
-    obj->search("ababacababac","abaabaaabaaab");
-    obj->search("ababacababac","abaabcabaabcb");
-    */
+    pattern = "bb";
+    result = obj->multiIndexSearch("bbbbbbb", pattern);
+    cout << "Text: " << "bbbbbbb" << "\nPattern: " << pattern << "\n";
+    cout << "Pattern found at indexes: ";
+    for (auto i : result) cout << i << " ";
+    cout << "\n\n";
+
 
     delete obj;
     return 0;
