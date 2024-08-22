@@ -24,8 +24,38 @@ class PatternMatching {
 class NaivePatternMatching : public PatternMatching {
     public:
         NaivePatternMatching(const vector<char>& alpha) : PatternMatching(alpha) {}
-        int simpleSearch(const string& text, const string& pattern) override;
-        vector<int> multiIndexSearch(const string& text, const string& pattern) override;
+
+        int simpleSearch(const string& text, const string& pattern) override{
+            int M = pattern.length();
+            int N = text.length();
+            for(int i = 0; i <= N - M; i++){
+                int j = 0;
+                while( j < M && text[i+j] == pattern[j])
+                    j++;
+                if(j == M){
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        vector<int> multiIndexSearch(const string& text, const string& pattern) override{
+            int M = pattern.length();
+            int N = text.length();
+            vector<int> result;
+
+            for(int i = 0; i <= N - M; i++){
+                int j = 0;
+                while( j < M && text[i+j] == pattern[j])
+                    j++;
+                if(j == M){
+                    result.push_back(i);
+                }
+            }
+
+            return result;
+        }
 };
 
 // Pattern Matching KMP
