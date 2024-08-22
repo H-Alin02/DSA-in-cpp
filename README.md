@@ -45,7 +45,7 @@ and a test file (`main.cpp` or similar) where applicable.
   - ⬜ String Quicksort (3-way Quicksort)
   - ⬜ Radix Sort (LDS and MSD)
 -  ⬜  Pattern Matching
-  - 🛠️  Naive
+  - ✅  Naive
   - ✅ KMP
 - ⬜ Search Algorithms
   - ⬜ Binary Search
