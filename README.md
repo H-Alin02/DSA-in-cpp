@@ -80,5 +80,5 @@ Each data structure or algorithm typically includes a `main.cpp` file demonstrat
 
 ```bash
 g++ -o output_file main.cpp
-./output_file```
+./output_file
 ```
