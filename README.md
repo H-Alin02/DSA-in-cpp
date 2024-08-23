@@ -32,9 +32,9 @@ and a test file (`main.cpp` or similar) where applicable.
 - ✅ Trie
 - ⬜ PATRICIA tree
 - ⬜ Ternary Search Trie
-- ⬜ Graph
-  - 🛠️ Undirected Graph
-  - ⬜ Directed Graph
+- 🛠️ Graph
+  - ✅ Undirected Graph
+  - 🛠️ Directed Graph
 - ⬜ More coming soon...
 
 ## Implemented Algorithms
@@ -46,13 +46,13 @@ and a test file (`main.cpp` or similar) where applicable.
 - ⬜ String Sorting
   - ⬜ String Quicksort (3-way Quicksort)
   - ⬜ Radix Sort (LDS and MSD)
--  ✅ Pattern Matching
+- ✅ Pattern Matching
   - ✅ Naive
   - ✅ KMP
-- ⬜ Search Algorithms
+- 🛠️ Search Algorithms
   - ⬜ Binary Search
-  -  🛠️  Depth-First Search (DFS)
-  -  🛠️  Breadth-First Search (BFS)
+  - 🛠️  Depth-First Search (DFS)
+  - 🛠️  Breadth-First Search (BFS)
 - ⬜ Dynamic Programming
 - ⬜ Graph Algorithms
   - ⬜ Dijkstra's Algorithm
