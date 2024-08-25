@@ -10,26 +10,46 @@
 #include <algorithm>
 using namespace std;
 
-template<typename T>
+
+template<typename T, typename Derived> // Pattern CRTP
 class Graph{
     protected:
         int NumV;
         int NumE;
+        bool directed;
 
     public:
-        virtual bool adjacent(T key1, T key2) = 0;
+        Graph(int v, int e, bool directed) : NumV(v), NumE(e), directed(directed) {}
+
+        virtual ~Graph() = default;
+
+        virtual bool adjacent(T key1, T key2) const = 0;
         virtual void insert(T key1, T key2) = 0;
-        virtual void print() = 0;
-        virtual vector<T> Neighbours(T key) = 0;
-        virtual int degree(T key) = 0;
+        virtual void print() const = 0;
+        virtual vector<T> Neighbours(T key) const = 0;
+        virtual int degree(T key) const = 0;
         virtual void deleteEdge(T key1, T key2) = 0;
-        virtual int getEdges() = 0;
-        virtual int getVertices() = 0;
+
+        int getEdges() const { return this->NumE; }
+        int getVertices() const { return this->NumV; }
+        bool getDirected() const { return this->directed; }
+
+        // Common methods for obtaining the reverse graph
+        Derived reverseGraph() const {
+            Derived reverse(NumV, this->directed);
+            for(int i = 0; i < this->NumV; ++i){
+                vector<T> neighbours = this->Neighbours(i);
+                for(T neighbour : neighbours){
+                    reverse.insert(neighbour, i);
+                }
+            }
+            return reverse;
+        }
 
 };
 
 template<typename T>
-class AdjMatGraph : public Graph<T>{
+class AdjMatGraph : public Graph<T, AdjMatGraph<T>>{
 
     protected:
         vector<vector<int>> AdjMat;
@@ -37,15 +57,11 @@ class AdjMatGraph : public Graph<T>{
     public:
 
         // Create graph with v verticies and 0 edges
-        AdjMatGraph(int v){
-            this->NumV = v;
-            this->NumE = 0;
-            AdjMat = vector<vector<int>>(v, vector<int>(v, 0));
-        }
+        AdjMatGraph(int v, bool directed) : Graph<T, AdjMatGraph<T>>(v,0, directed), AdjMat(v, vector<int>(v, 0)) { }
 
         // Create graph with information from file
-        AdjMatGraph(string path){
-            ifstream infile(path);
+        AdjMatGraph(string path, bool directed): Graph<T, AdjMatGraph<T>>(0,0, directed){
+            ifstream infile(path); 
             if(!infile){
                 cerr << "Error opening file" << endl;
                 exit(1);
@@ -56,7 +72,7 @@ class AdjMatGraph : public Graph<T>{
             infile >> v >> e;
             this->NumV = v;
             this->NumE = e;
-            AdjMat = vector<vector<int>>(v, vector<int>(v, 0));
+            AdjMat.assign(v, vector<int>(v, 0));
 
             // Add edges
             T x, y;
@@ -68,14 +84,10 @@ class AdjMatGraph : public Graph<T>{
             infile.close();
         }
 
-        AdjMatGraph(int v, int e){
-            this->NumV = v;
-            this->NumE = e;
-            AdjMat = vector<vector<int>>(v, vector<int>(e, 0));
-
+        AdjMatGraph(int v, int e, bool directed) : Graph<T, AdjMatGraph<T>>(v,0,directed), AdjMat(v, vector<int>(v, 0)){
             random_device rd; 
             mt19937 gen(rd());
-            std::uniform_int_distribution<> dis(0, v-1);
+            uniform_int_distribution<> dis(0, v-1);
 
             for(int i = 0; i < e; ++i){
                 int x = dis(gen);
@@ -87,22 +99,28 @@ class AdjMatGraph : public Graph<T>{
 
         ~AdjMatGraph(){}
 
-        bool adjacent(T key1, T key2) override{
+
+        bool adjacent(T key1, T key2) const override{
             return AdjMat[key1][key2];
         }
 
         void insert(T key1, T key2) override{
+            if (!adjacent(key1, key2)) {
             AdjMat[key1][key2] = 1;
-            AdjMat[key2][key1] = 1;
+            if (!this->directed) {
+                AdjMat[key2][key1] = 1;
+            }
+            this->NumE++;
+        }
         }
 
-        void insert(vector<pair<T,T>> edges){
-            for(pair<T,T> edge : edges){
+        void insert(const vector<pair<T,T>>& edges){
+            for(auto& edge : edges){
                 insert(edge.first, edge.second);
             }
         }
 
-        void print() override{
+        void print() const override{
             // Prints the Graph matrix            
             cout << "   ";
             for (int i = 0; i < this->NumV; i++)
@@ -126,7 +144,7 @@ class AdjMatGraph : public Graph<T>{
             cout << "\n";
         }
 
-        vector<T> Neighbours(T key) override{
+        vector<T> Neighbours(T key) const override{
             vector<T> neighbours;
             for(int i = 0; i < this->NumV; ++i){
                 if(AdjMat[key][i]){
@@ -136,27 +154,23 @@ class AdjMatGraph : public Graph<T>{
             return neighbours;
         }
 
-        int degree(T key) override{
+        int degree(T key) const override{
             return Neighbours(key).size();
         }
 
-        void deleteEdge(T key1, T key2){
+        void deleteEdge(T key1, T key2) override {
+            if (adjacent(key1, key2)) {
             AdjMat[key1][key2] = 0;
-            AdjMat[key2][key1] = 0;
+            if (!this->directed) {
+                AdjMat[key2][key1] = 0;
+            }
+            this->NumE--;
+            }
         }
-
-        int getEdges(){
-            return this->NumE;
-        }
-
-        int getVertices(){
-            return this->NumV;
-        } 
-    
 };
 
 template<typename T>
-class AdjListGraph : public Graph<T>{
+class AdjListGraph : public Graph<T, AdjListGraph<T>>{
     
     protected:
         vector<list<T>> AdjList;
@@ -164,14 +178,10 @@ class AdjListGraph : public Graph<T>{
     public:
 
         // Create graph with v verticies and 0 edges
-        AdjListGraph(int v){
-            this->NumE = v;
-            this->NumV = 0;
-            AdjList = vector<list<T>>(v, list<T>());
-        }
+        AdjListGraph(int v, bool directed) : Graph<T, AdjListGraph<T>>(v,0, directed), AdjList(v){}
 
         // Create graph with information from file
-        AdjListGraph(string path){
+        AdjListGraph(string path, bool directed): Graph<T, AdjListGraph<T>>(0,0, directed){
             ifstream infile(path);
             if(!infile){
                 cerr << "Error opening file" << endl;
@@ -183,7 +193,7 @@ class AdjListGraph : public Graph<T>{
             infile >> v >> e;
             this->NumV = v;
             this->NumE = e;
-            AdjList = vector<list<T>>(v, list<T>());
+            AdjList.assign(v, list<T>());
 
             // Add edges
             T x, y;
@@ -195,12 +205,10 @@ class AdjListGraph : public Graph<T>{
             infile.close();
         }
 
-        AdjListGraph(Graph<T>& g){
-            this->NumV = g.getVertices();
-            this->NumE = g.getEdges();
-
-            AdjList = vector<list<T>>(this->NumV,list<T>());
-
+        template<typename Derived>
+        AdjListGraph(Graph<T, Derived>& g) : 
+        Graph<T, AdjListGraph<T>>(g.getVertices(), g.getEdges(), g.getDirected()), 
+        AdjList(g.getVertices()) {
             for(int i = 0; i < this->NumV; i++){
                 vector<T> n = g.Neighbours(i);
                 for(int j = 0; j < n.size(); j++){
@@ -210,30 +218,29 @@ class AdjListGraph : public Graph<T>{
             }
         }
 
-        bool adjacent(T key1, T key2) override{
+        ~AdjListGraph(){}
+
+        bool adjacent(T key1, T key2) const override{
             return find(AdjList[key1].begin(), AdjList[key1].end(), key2) != AdjList[key1].end();
         }
 
         void insert(T key1, T key2) override{
-            if (key1 == key2) {
-                if (find(AdjList[key1].begin(), AdjList[key1].end(), key2) == AdjList[key1].end()) {
-                    AdjList[key1].push_back(key2);
-                }
-            } else {
-                if (!adjacent(key1, key2)) {
-                    AdjList[key1].push_back(key2);
-                    AdjList[key2].push_back(key1);
-                }
+            if (!adjacent(key1, key2)) {
+            AdjList[key1].push_back(key2);
+            if (!this->directed) {
+                AdjList[key2].push_back(key1);
             }
+            this->NumE++;
+        }
         }
 
-        void insert(vector<pair<T,T>> edges){
-            for(pair<T,T> edge : edges){
+        void insert( const vector<pair<T,T>>& edges){
+            for(auto& edge : edges){
                 insert(edge.first, edge.second);
             }
         }
 
-        void print() override{
+        void print() const override{
             for (int i = 0; i < AdjList.size(); ++i) {
                 cout <<"[" << i <<"]" << "-->";
                 for (T value : AdjList[i]) {
@@ -245,36 +252,29 @@ class AdjListGraph : public Graph<T>{
             cout << "\n";
         }
 
-        vector<T> Neighbours(T key) override{
+        vector<T> Neighbours(T key) const override{
             vector<T> neighbours(AdjList[key].begin(), AdjList[key].end());
             return neighbours;
         }
 
-        int degree(T key) override{
+        int degree(T key) const override{
             return Neighbours(key).size();
         }
 
-        void deleteEdge(T key1, T key2){
-            // Find the iterator that points to key1 in the adjacency list of key2
+        void deleteEdge(T key1, T key2) override{
             auto it1 = find(AdjList[key1].begin(), AdjList[key1].end(), key2);
             if (it1 != AdjList[key1].end()) {
                 AdjList[key1].erase(it1);
-            }
+                this->NumE--;
+        }
 
-            // Find the iterator that points to key2 in the adjacency list of key1
+        if (!this->directed) {
             auto it2 = find(AdjList[key2].begin(), AdjList[key2].end(), key1);
             if (it2 != AdjList[key2].end()) {
                 AdjList[key2].erase(it2);
             }
         }
-
-        int getEdges(){
-            return this->NumE;
         }
-
-        int getVertices(){
-            return this->NumV;
-        } 
 };
 
 #endif
