@@ -38,5 +38,12 @@ int main(){
     }
     cout << endl;
 
+    vector<int> topoResult2 = GraphAlgorithms<int, AdjListGraph<int>>::KahnTopologicalSort(graph);
+    cout << "Topological Sort: ";
+    for (int node : topoResult2) {
+        cout << node << " ";
+    }
+    cout << endl;
+
     return 0;
 }

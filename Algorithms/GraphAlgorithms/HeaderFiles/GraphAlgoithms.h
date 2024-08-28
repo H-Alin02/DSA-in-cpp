@@ -100,6 +100,52 @@ public:
         
         return result;
     }
+
+
+    static vector<int> KahnTopologicalSort(const GraphType& graph) {
+        int NumV = graph.getVertices();
+
+        // Vector to store indegree of each vertex
+        vector<int> indegree(NumV);
+        for (int i = 0; i < NumV ; i++) {
+            for (auto it : graph.Neighbours(i)) {
+                indegree[it]++;
+            }
+        }
+
+        // Queue to store vertices with indegree 0
+        queue<int> queue;
+        for (int i = 0; i < NumV; i++) {
+            if (indegree[i] == 0) {
+                queue.push(i);
+            }
+        }
+
+        vector<int> result;
+        while (!queue.empty()) {
+            int node = queue.front();
+            queue.pop();
+            result.push_back(node);
+
+            // Decrease indegree of adjacent vertices as the
+            // current node is in topological order
+            for (auto it : graph.Neighbours(node)) {
+                indegree[it]--;
+
+                // If indegree becomes 0, push it to the queue
+                if (indegree[it] == 0)
+                    queue.push(it);
+            }
+        }
+
+        // Check for cycle
+        if (result.size() != NumV) {
+            cout << "Graph contains cycle!" << endl;
+            return {};
+        }
+
+        return result;
+    }
 };
 
 
