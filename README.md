@@ -32,7 +32,7 @@ and a test file (`main.cpp` or similar) where applicable.
 - ✅ Trie
 - ⬜ PATRICIA tree
 - ⬜ Ternary Search Trie
-- ⬜ Graph
+- 🛠️ Graph
   - ✅ Undirected Graph
   - ✅ Directed Graph
   - ⬜ Weighted Graph
@@ -50,12 +50,12 @@ and a test file (`main.cpp` or similar) where applicable.
 - ✅ Pattern Matching
   - ✅ Naive
   - ✅ KMP
-- 🛠️ Search Algorithms
+- ⬜ Search Algorithms
   - ⬜ Binary Search
-  - 🛠️  Depth-First Search (DFS)
-  - 🛠️  Breadth-First Search (BFS)
 - ⬜ Dynamic Programming
-- ⬜ Graph Algorithms
+- 🛠️ Graph Algorithms
+  - ✅ Depth-First Search (DFS)
+  - ✅ Breadth-First Search (BFS)
   - ⬜ Dijkstra's Algorithm
   - ⬜ Kruskal's Algorithm
   - ⬜ Topological sorting
