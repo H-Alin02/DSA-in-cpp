@@ -35,7 +35,7 @@ and a test file (`main.cpp` or similar) where applicable.
 - 🛠️ Graph
   - ✅ Undirected Graph
   - ✅ Directed Graph
-  - ⬜ Weighted Graph
+  - 🛠️ Weighted Graph
 - ⬜ More coming soon...
 
 ## Implemented Algorithms
@@ -58,9 +58,9 @@ and a test file (`main.cpp` or similar) where applicable.
   - ✅ Breadth-First Search (BFS)
   - ⬜ Dijkstra's Algorithm
   - ⬜ Kruskal's Algorithm
-  - ⬜ Topological sorting
-    - ⬜ Kahn's Algorithm
-    - ⬜ DFS Based Algorithm
+  - 🛠️ Topological sorting
+    - 🛠️ Kahn's Algorithm
+    - ✅ DFS Based Algorithm
 - ⬜ More coming soon...
 
 ## Getting Started
