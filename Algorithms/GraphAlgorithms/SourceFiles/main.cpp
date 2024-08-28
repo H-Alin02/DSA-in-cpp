@@ -4,18 +4,37 @@
 using namespace std;
 
 int main(){
-    AdjListGraph<int>obj7("text.txt",false);
-    obj7.print();
+    AdjListGraph<int>graph("text.txt",true);
+    graph.print();
     
-    vector<int> dfsResult = GraphAlgorithms<int, AdjListGraph<int>>::DFS(obj7, 0);
-    for(int x : dfsResult){
-        cout << x << " ";
-    }
-    cout << endl;
+    auto dfsResult = GraphAlgorithms<int, AdjListGraph<int>>::DFS(graph);
 
-    vector<int> bfsResult = GraphAlgorithms<int, AdjListGraph<int>>::BFS(obj7, 0);
-    for(int x : bfsResult){
-        cout << x << " ";
+    // Stampa dei risultati della DFS
+    for (const auto& [componentIndex, component] : dfsResult) {
+        cout << "Component DFS " << componentIndex << ": ";
+        for (int node : component) {
+            cout << node << " ";
+        }
+        cout << endl;
+    }
+
+    // Esecuzione della BFS per tutte le componenti connesse
+    auto bfsResult = GraphAlgorithms<int, AdjListGraph<int>>::BFS(graph);
+
+    // Stampa dei risultati della BFS
+    for (const auto& [componentIndex, component] : bfsResult) {
+        cout << "Component BFS " << componentIndex << ": ";
+        for (int node : component) {
+            cout << node << " ";
+        }
+        cout << endl;
+    }
+
+    stack<int> topoResult = GraphAlgorithms<int, AdjListGraph<int>>::ReversePostTopologicalSort(graph);
+    cout << "Topological Sort: ";
+    while (!topoResult.empty()) {
+        cout << topoResult.top() << " ";
+        topoResult.pop();
     }
     cout << endl;
 
