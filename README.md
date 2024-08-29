@@ -32,10 +32,11 @@ and a test file (`main.cpp` or similar) where applicable.
 - ✅ Trie
 - ⬜ PATRICIA tree
 - ⬜ Ternary Search Trie
-- 🛠️ Graph
+- ✅ Graph
   - ✅ Undirected Graph
   - ✅ Directed Graph
-  - 🛠️ Weighted Graph
+  - ✅ Weighted Graph
+- 🛠️ Union Find
 - ⬜ More coming soon...
 
 ## Implemented Algorithms
