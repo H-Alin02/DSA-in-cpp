@@ -2,6 +2,7 @@
 #define _GRAPH_ALGORITHMS_
 
 #include "../../../DataStructures/Graph/HeaderFiles/Graph.h"
+#include "../../../DataStructures/UnionFind/HeaderFiles/UnionFind.h"
 #include <queue>
 #include <stack>
 #include <unordered_set>
@@ -86,7 +87,6 @@ public:
         return components;
     }
     
-
     //Reverse postorder Topological Sort
     static stack<T> ReversePostTopologicalSort(const GraphType& graph) {
         stack<T> result;
@@ -145,6 +145,38 @@ public:
         }
 
         return result;
+    }
+
+    static pair<vector<pair<pair<T,T>,double>>, double> KruskalMST(const GraphType& graph) {
+        vector<pair<pair<T, T>, double>> result;
+        vector<pair<pair<T, T>, double>> edges = graph.getEdges();
+        double MSTCost = 0.0;
+
+        // Sort the edges in increasing order of weight
+        sort(edges.begin(), edges.end(), [](const pair<pair<T, T>, double>& a, const pair<pair<T, T>, double>& b) {
+            return a.second < b.second;
+        });
+
+        UnionFind<int> UF(graph.getVertices());
+
+        for (auto& edge : edges) {
+            T u = edge.first.first;
+            T v = edge.first.second;
+            double weight = edge.second;
+
+            if (!UF.connect(u, v)) {
+                result.push_back({{u, v}, weight});
+                UF.UnionBySize(u, v);
+                MSTCost += weight;
+            }
+
+            // Stop when all vertices are connected
+            if (result.size() == graph.getVertices() - 1) {
+                break;
+            }
+        }
+
+        return {result,MSTCost};
     }
 };
 
