@@ -52,12 +52,12 @@ template<typename T>
 class AdjMatGraph : public Graph<T, AdjMatGraph<T>>{
 
     protected:
-        vector<vector<int>> AdjMat;
+        vector<vector<double>> AdjMat;
 
     public:
 
         // Create graph with v verticies and 0 edges
-        AdjMatGraph(int v, bool directed) : Graph<T, AdjMatGraph<T>>(v,0, directed), AdjMat(v, vector<int>(v, 0)) { }
+        AdjMatGraph(int v, bool directed) : Graph<T, AdjMatGraph<T>>(v,0, directed), AdjMat(v, vector<double>(v, 0)) { }
 
         // Create graph with information from file
         AdjMatGraph(string path, bool directed): Graph<T, AdjMatGraph<T>>(0,0, directed){
@@ -72,7 +72,7 @@ class AdjMatGraph : public Graph<T, AdjMatGraph<T>>{
             infile >> v >> e;
             this->NumV = v;
             this->NumE = e;
-            AdjMat.assign(v, vector<int>(v, 0));
+            AdjMat.assign(v, vector<double>(v, 0));
 
             // Add edges
             T x, y;
@@ -135,7 +135,7 @@ class AdjMatGraph : public Graph<T, AdjMatGraph<T>>{
 
             for (int i = 0; i < AdjMat.size(); ++i) {
                 cout << i << " |";
-                for (int value : AdjMat[i]) {
+                for (double value : AdjMat[i]) {
                     cout << value << " ";
                 }
                 cout << endl;
@@ -172,7 +172,7 @@ class AdjMatGraph : public Graph<T, AdjMatGraph<T>>{
 template<typename T>
 class AdjListGraph : public Graph<T, AdjListGraph<T>>{
     
-    protected:
+    private:
         vector<list<T>> AdjList;
 
     public:
@@ -266,14 +266,14 @@ class AdjListGraph : public Graph<T, AdjListGraph<T>>{
             if (it1 != AdjList[key1].end()) {
                 AdjList[key1].erase(it1);
                 this->NumE--;
-        }
+            }   
 
-        if (!this->directed) {
-            auto it2 = find(AdjList[key2].begin(), AdjList[key2].end(), key1);
-            if (it2 != AdjList[key2].end()) {
-                AdjList[key2].erase(it2);
+            if (!this->directed) {
+                auto it2 = find(AdjList[key2].begin(), AdjList[key2].end(), key1);
+                if (it2 != AdjList[key2].end()) {
+                    AdjList[key2].erase(it2);
+                }
             }
-        }
         }
 };
 
