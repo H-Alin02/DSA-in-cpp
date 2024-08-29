@@ -60,7 +60,7 @@ public:
         random_device rd; 
         mt19937 gen(rd());
         uniform_int_distribution<> dis(0, v-1);
-        uniform_int_distribution<> dis2(1,15);
+        uniform_int_distribution<> dis2(1,50);
 
         for(int i = 0; i < e; ++i){
             int x = dis(gen);
@@ -103,6 +103,21 @@ public:
     void deleteEdge(T key1, T key2) override {
         AdjMatGraph<T>::deleteEdge(key1, key2);
     }
+
+    vector<pair<pair<T, T>, double>> getEdges() const {
+        vector<pair<pair<T, T>, double>> edges;
+        for (int i = 0; i < this->AdjMat.size(); ++i) {
+            // We only consider upper triangular matrices for avoiding duplicates
+            for (int j = i + 1; j < this->AdjMat[i].size(); ++j) { 
+                if (this->AdjMat[i][j]) {
+                    edges.push_back({{i, j}, this->AdjMat[i][j]});
+                }
+            }
+        }
+        return edges;
+    }
+
+    int getVertices() const { return AdjMatGraph<T>::NumV; }
 };
 
 template<typename T>
@@ -192,6 +207,27 @@ public:
             }
         }
     }
+
+    vector<pair<pair<T, T>, double>> getEdges() const {
+        vector<pair<pair<T, T>, double>> edges;
+        vector<bool> visited(this->AdjList.size(), false);
+
+        for (int i = 0; i < this->AdjList.size(); ++i) {
+            for (const auto& neighbor : this->AdjList[i]) {
+                T j = neighbor.first;
+                double weight = neighbor.second;
+
+                // Ensure each edge is added only once
+                if (!visited[j]) {
+                    edges.push_back({{i, j}, weight});
+                }
+            }
+            visited[i] = true;
+        }
+        return edges;
+    }
+
+    int getVertices() const { return this->NumV; }
 };
 
 #endif
