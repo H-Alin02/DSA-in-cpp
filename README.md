@@ -36,7 +36,7 @@ and a test file (`main.cpp` or similar) where applicable.
   - ✅ Undirected Graph
   - ✅ Directed Graph
   - ✅ Weighted Graph
-- 🛠️ Union Find
+- ✅ Union Find
 - ⬜ More coming soon...
 
 ## Implemented Algorithms
