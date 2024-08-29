@@ -99,5 +99,12 @@ class UnionFind{
             }
         }
 
+        bool connect(T x, T y) {
+            return find(x) == find(y);
+        }
+
+        int getNumSets() const {
+            return numSets;
+        }
 };
 #endif
