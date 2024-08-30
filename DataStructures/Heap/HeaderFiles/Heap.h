@@ -43,6 +43,12 @@ class Heap {
 
 public:
 
+    //Constructor: custom comparator and maxHeap = true for max-heap, false for min-heap (default)
+    Heap(function<bool(T, T)> comparator, bool isMinHeap = true) {
+        if(isMinHeap)
+            this->comparator = comparator;
+        else this->comparator = comparator;
+    }
     // Constructor: maxHeap = true for max-heap, false for min-heap (default)
     Heap(bool isMinHeap = true) {
         if(isMinHeap)
