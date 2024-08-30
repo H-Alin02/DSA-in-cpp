@@ -23,7 +23,7 @@ and a test file (`main.cpp` or similar) where applicable.
 - ⬜ Linked List
 - ⬜ Stack
 - ⬜ Queue
-- 🛠️ Priority Queue (Min/Max Heap)
+- ✅ Priority Queue (Min/Max Heap)
 - ✅ Binary Search Tree
 - ✅ AVL Tree
 - ⬜ 2-3 Tree
@@ -55,14 +55,14 @@ and a test file (`main.cpp` or similar) where applicable.
 - ⬜ Search Algorithms
   - ⬜ Binary Search
 - ⬜ Dynamic Programming
-- 🛠️ Graph Algorithms
+- ⬜ Graph Algorithms
   - ✅ Depth-First Search (DFS)
   - ✅ Breadth-First Search (BFS)
   - ⬜ Dijkstra's Algorithm
   - ✅ Kruskal's Algorithm
-  - 🛠️ Prim's Algorithm
-    - 🛠️ Lazy Version
-    - 🛠️ Eager Version
+  - ✅ Prim's Algorithm
+    - ✅ Lazy Version
+    - ✅ Eager Version
   - ✅ Topological sorting
     - ✅ Kahn's Algorithm
     - ✅ DFS Based Algorithm
