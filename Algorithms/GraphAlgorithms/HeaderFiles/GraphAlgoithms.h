@@ -3,6 +3,7 @@
 
 #include "../../../DataStructures/Graph/HeaderFiles/Graph.h"
 #include "../../../DataStructures/UnionFind/HeaderFiles/UnionFind.h"
+#include "../../../DataStructures/Heap/HeaderFiles/Heap.h"
 #include <queue>
 #include <stack>
 #include <unordered_set>
@@ -178,6 +179,109 @@ public:
 
         return {result,MSTCost};
     }
+
+    static pair<vector<pair<pair<T, T>, double>>, double> LazyPrimMST(const GraphType& graph) {
+        vector<pair<pair<T, T>, double>> result;
+        int V = graph.getVertices();
+
+        vector<bool> visited(V,false);
+
+        Heap<pair<pair<T, T>, double>> minHeap([](const pair<pair<T,T>,double>& a, const pair<pair<T,T>,double>& b) {
+            return a.second < b.second;
+        }, true);
+
+        double MSTCost = 0.0;
+
+        // LAMBDA FUNCTION TO ADD NEIGHBOURS TO THE MST
+        // starts from node
+        // Mark node as visited
+        // For each neighbour of node
+        // If the neighbour is not visited
+        // Add the edge to the minHeap
+        auto addEdges = [&](int node) {
+            visited[node] = true;
+            for (const auto& edge : graph.getEdges(node)) {
+                int u = edge.first.first;
+                int v = edge.first.second;
+                double weight = edge.second;
+
+                if (u == node && !visited[v]) {
+                    minHeap.push({{u, v}, weight});
+                } else if (v == node && !visited[u]) {
+                    minHeap.push({{v, u}, weight});
+                }
+            }
+        };
+
+        addEdges(0); // Starts from node 0
+
+        while (!minHeap.empty() && result.size() < V - 1) {
+            auto edge = minHeap.top();
+            minHeap.pop();
+            int u = edge.first.first;
+            int v = edge.first.second;
+            double weight = edge.second;
+
+            if (visited[v]) continue; // Goes to the next iteration
+
+            result.push_back({{u, v}, weight});
+            MSTCost += weight;
+
+            addEdges(v); // Aggiungi i nuovi bordi del nodo v all'MST
+        }
+
+        return {result, MSTCost};
+    }
+
+    static pair<vector<pair<pair<T, T>, double>>, double> EagerPrimMST(const GraphType& graph) {
+        vector<pair<pair<T, T>, double>> result;
+        int V = graph.getVertices();
+
+        vector<bool> visited(V,false);
+
+        Heap<pair<pair<T, T>, double>> minHeap([](const pair<pair<T,T>,double>& a, const pair<pair<T,T>,double>& b) {
+            return a.second < b.second;
+        }, true);
+
+        double MSTCost = 0.0;
+
+        vector<double> key(V, numeric_limits<double>::infinity()); // Store min weight edge to include in MST
+        vector<int> parent(V, -1);  // Store parent of node in MST
+
+        key[0] = 0.0; // Start from the first node, weight 0
+        minHeap.push({{0,0},0}); // Node 0 with key value 0
+
+        while (!minHeap.empty() && result.size() < V - 1) {
+            int u = minHeap.top().first.second;
+            minHeap.pop();
+
+            if (visited[u]) continue;
+
+            visited[u] = true; // Include node in MST
+            MSTCost += key[u];
+
+            if (parent[u] != -1) {
+                result.push_back({{parent[u], u}, key[u]});
+            }
+
+            // Update keys and parents for adjacent nodes
+            for (const auto& edge : graph.getEdges(u)) {
+                int v = edge.first.second;
+                double weight = edge.second;
+
+                if (!visited[v] && key[v] > weight) {
+                    key[v] = weight;
+                    parent[v] = u;
+                    minHeap.push({{u,v},weight});
+                }
+            }
+        }
+
+        return {result, MSTCost};
+
+    }
+
+
 };
 
 

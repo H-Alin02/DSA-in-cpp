@@ -227,6 +227,17 @@ public:
         return edges;
     }
 
+    vector<pair<pair<T, T>, double>> getEdges(T key) const {
+        vector<pair<pair<T, T>, double>> edges;
+        for (const auto& neighbor : this->AdjList[key]) {
+            T j = neighbor.first;
+            double weight = neighbor.second;
+            // Ensure each edge is added only once
+            edges.push_back({{key, j}, weight});
+        }
+        return edges;
+    }
+
     int getVertices() const { return this->NumV; }
 };
 

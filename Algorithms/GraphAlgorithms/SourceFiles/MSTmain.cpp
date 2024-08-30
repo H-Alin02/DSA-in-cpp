@@ -15,5 +15,21 @@ int main(){
     }
     cout << endl;
 
+    auto result2 = GraphAlgorithms<int, AdjListWeightedGraph<int>>::LazyPrimMST(graph1);
+    
+    cout << "Lazy Prim MST 1, cost: "<< result2.second << endl;
+    for(auto i : result2.first){
+        cout << "(" << i.first.first << "," << i.first.second << ")" << "=" << i.second << endl;
+    }
+    cout << endl;
+
+    auto result3 = GraphAlgorithms<int, AdjListWeightedGraph<int>>::EagerPrimMST(graph1);
+    
+    cout << "Eager Prim MST 1, cost: "<< result3.second << endl;
+    for(auto i : result3.first){
+        cout << "(" << i.first.first << "," << i.first.second << ")" << "=" << i.second << endl;
+    }
+    cout << endl;
+
     return 0;
 }
