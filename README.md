@@ -55,10 +55,10 @@ and a test file (`main.cpp` or similar) where applicable.
 - ⬜ Search Algorithms
   - ⬜ Binary Search
 - ⬜ Dynamic Programming
-- ⬜ Graph Algorithms
+- ✅ Graph Algorithms
   - ✅ Depth-First Search (DFS)
   - ✅ Breadth-First Search (BFS)
-  - ⬜ Dijkstra's Algorithm
+  - ✅ Dijkstra's Algorithm
   - ✅ Kruskal's Algorithm
   - ✅ Prim's Algorithm
     - ✅ Lazy Version
