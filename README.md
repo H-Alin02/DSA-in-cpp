@@ -78,7 +78,6 @@ To get a local copy of the repository, run:
 
 ```bash
 git clone https://github.com/H-Alin02/DSA-in-cpp.git
-cd dsa-cpp
 ```
 ## Building and Running
 
