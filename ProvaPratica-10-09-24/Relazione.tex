@@ -201,8 +201,7 @@ confrontandolo con il suo Pseudocodice originale:
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\textwidth]{Images/DijkstraPseudoCode.png}
-    \caption{Pseudocodice dell'algoritmo di Dijkstra.}
-    \label{fig:Pseudocodice Dijkstra}
+    \caption{Pseudocodice dell'algoritmo di Dijkstra.}\label{fig:Pseudocodice Dijkstra}
 \end{figure}
 
 
@@ -239,8 +238,7 @@ Di seguito vengono riportati alcuni esempi di esecuzione dell'algoritmo su picco
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth]{Images/graph1.png}
-    \caption{Grafo 1.}
-    \label{fig:grafo1}
+    \caption{Grafo 1.}\label{fig:grafo1}
 \end{figure}
 
 \begin{table}[H]
@@ -257,8 +255,7 @@ Di seguito vengono riportati alcuni esempi di esecuzione dell'algoritmo su picco
         4 & All & 4 & 9 & 2 & 5 & 9 & 9 \\
         \bottomrule
     \end{tabular}
-    \caption{Esecuzione del algoritmo di Dijkstra per il nodo 0 sul grafo 1}
-    \label{tab:Tgrafo1}
+    \caption{Esecuzione del algoritmo di Dijkstra per il nodo 0 sul grafo 1}\label{tab:Tgrafo1}
 \end{table}
 
 \clearpage
@@ -272,8 +269,7 @@ Di seguito vengono riportati alcuni esempi di esecuzione dell'algoritmo su picco
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth]{Images/graph2.png}
-    \caption{Grafo 2.}
-    \label{fig:grafo2}
+    \caption{Grafo 2.}\label{fig:grafo2}
 \end{figure}
 
 \begin{table}[H]
@@ -305,8 +301,7 @@ Di seguito vengono riportati alcuni esempi di esecuzione dell'algoritmo su picco
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth]{Images/graph3.png}
-    \caption{Grafo 3.}
-    \label{fig:grafo3}
+    \caption{Grafo 3.}\label{fig:grafo3}
 \end{figure}
 
 \begin{table}[H]
@@ -370,21 +365,15 @@ sugli acquedotti ($n \leq 200$) e sui tubi ($m \leq 5000$).
 \section{Strutture dati utilizzate}
 Per rappresentare il grafo, ho utilizzato due possibili rappresentazioni:
 \begin{itemize}
-    \item \textbf{Lista di adiacenza}: Questa struttura è stata utilizzata per ridurre lo spazio necessario per grafi sparsi. Permette di memorizzare efficientemente i vicini di ogni nodo e le loro perdite associate.
-    \item \textbf{Matrice di adiacenza}: Utilizzata per rappresentare grafi più densi, anche se meno efficiente in termini di spazio.
+    \item \textbf{Lista di adiacenza}: Questa struttura è stata utilizzata per ridurre lo 
+    spazio necessario per grafi sparsi. Permette di memorizzare efficientemente i vicini di 
+    ogni nodo e le loro perdite associate.
+    \item \textbf{Matrice di adiacenza}: Utilizzata per rappresentare grafi più densi, anche 
+    se meno efficiente in termini di spazio.
 \end{itemize}
 
 Per la gestione della selezione del nodo successivo con la minima distanza, è stata 
 utilizzata una \textbf{coda con priorità} implementata come min-heap, che permette 
 l'accesso al nodo con il peso minore in tempo $O(\log V)$. Questo garantisce che 
 l'algoritmo funzioni in modo efficiente anche con un numero elevato di nodi.
-
-
-
-
-
-
-
-
-
 \end{document}
