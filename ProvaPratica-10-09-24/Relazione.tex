@@ -104,12 +104,12 @@ Durante lo svolgimento del corso, mi è stato molto utile creare una repository 
 con diverse implementazioni di algoritmi e strutture dati. 
 Per il completamento del progetto ho utilizzato alcuni algoritmi e strutture dati
 da me stesso implementate, tra cui l'algoritmo di Dijkstra, la classe WeightedGraph,
-la classe Heap. 
+la classe Heap.
 
-il codice sorgente completo può essere consultato al seguente link:
+Il codice sorgente completo può essere consultato al seguente link:
 
 \begin{quote}
-    \url{https://github.com/username/algoritmi-strutture-dati}
+    \url{https://github.com/H-Alin02/DSA-in-cpp}
 \end{quote}
 
 All'interno del progetto, ho riutilizzato alcune classi precedentemente sviluppate 
@@ -124,13 +124,14 @@ In particolare, ho utilizzato:
     \item L'algoritmo di \textbf{Dijkstra} per il calcolo del percorso minimo tra nodi 
     in un grafo pesato, che è stato implementato nella classe \texttt{GraphAlgorithms}.
 \end{itemize}
-\clearpage
 
 \subsection{Algoritmo di Dijkstra}
 
 L'algoritmo di Dijkstra per il calcolo del percorso minimo è stato implementato nella 
 classe \texttt{GraphAlgorithms}. 
-Di seguito è riportata una versione dell'algoritmo:
+Di seguito è riportata una versione dell'algoritmo: 
+
+\clearpage
 
 \begin{lstlisting}[language=c++, label=Dijkstra]
     // Dijkstra implementation to find the shortest path from start to destination
@@ -177,7 +178,6 @@ Di seguito è riportata una versione dell'algoritmo:
 
 \end{lstlisting}
 
-\clearpage
 L'algoritmo utilizza una \textbf{coda di priorità} (Min-Heap) per estrarre il nodo con 
 la distanza minore e aggiornare le distanze per i nodi adiacenti. Il codice gestisce sia grafi 
 con lista di adiacenza che grafi pesati.\\
@@ -195,25 +195,34 @@ pesi variabili e l'esecuzione di algoritmi di ricerca del percorso minimo.
 
 \section{Correttezza dell'algoritmo}
 
-Analiziamo ora la Correttezza del implementazione dell'algoritmo di Dijkstra
+Analiziamo ora la correttezza dell' implementazione dell'algoritmo di Dijkstra 
+confrontandolo con il suo Pseudocodice originale: 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Images/DijkstraPseudoCode.png}
+    \caption{Pseudocodice dell'algoritmo di Dijkstra.}
+    \label{fig:Pseudocodice Dijkstra}
+\end{figure}
+
 
 \begin{enumerate}
-    \item \textbf{Inizializzazione}: Il vettore ``dist'' viene inizializzato con infinito per 
+    \item \textbf{Inizializzazione del set S e del vettore dist}: Nell'implementazione, 
+    il set S viene implicitamente gestito attraverso l'uso di una coda a priorità 
+    (implementata con un Min-Heap).
+    Se un nodo è estratto dalla coda significa che il percorso minimo per quel nodo è già
+    stato trovato. Il vettore ``dist'' viene inizializzato con infinito per 
     tutti i nodi, tranne il nodo di partenza, il cui costo è impostato a 0.
-
-    \item \textbf{Uso della Coda di Priorità}: Utilizzi una coda di priorità 
-    (implementata con un Min-Heap) per gestire i nodi in base alla loro distanza 
-    minima corrente. 
-    Questo è fondamentale per assicurarsi che l'algoritmo selezioni sempre il nodo 
-    con il minor costo per esplorare i suoi vicini.
 
     \item \textbf{Aggiornamento delle Distanze}: Durante l'iterazione, se viene trovato un 
     percorso più breve verso un nodo, la distanza viene aggiornata e il nodo viene 
     reinserito nella coda di priorità con la nuova distanza.
+    Questo passaggio viene implementato con la condizione \texttt{dist[v] > u\_dist + weight},
+    che aggiorna le distanze e aggiunge il nodo $v$ alla coda di priorità con la nuova distanza.
 
-    \item \textbf{Condizione di Terminazione}: Se il nodo di destinazione viene estratto dalla coda, 
-    l'algoritmo restituisce la distanza minima a quel nodo. 
-    Se nessun percorso viene trovato, restituisce -1.
+    \item \textbf{Condizione di Terminazione}: Nello pseudocodice l'algoritmo continua fino a 
+    quando tutti i nodi non sono stati elaborati (cioe $S = V$), nell'implementazione l'algoritmo
+    si interrompe non appena viene trovato il nodo di destinazione 
 \end{enumerate}
 
 \clearpage
@@ -223,46 +232,16 @@ Di seguito vengono riportati alcuni esempi di esecuzione dell'algoritmo su picco
 
 \subsection*{Esempio 1}
 \begin{itemize}
-    \item \textbf{Input}: 5 acquedotti, 7 tubazioni, partenza da S=0, arrivo a T=4.   
-    \item \textbf{Output}: La minima perdita da 1 a 3 è $10ml/s$ passando per il nodo 2.
+    \item \textbf{Input}: 5 acquedotti, 7 tubazioni, partenza da S=0, arrivo a T=4.  
+    \item \textbf{Output}: La minima perdita da 0 a 4 è $9ml/s$.
 \end{itemize}
 
-\subsection*{Esempio 2}
-\begin{itemize}
-    \item \textbf{Input}: 5 acquedotti, 6 tubazioni, partenza da S=0, arrivo a T=4.
-    \item \textbf{Output}: \ldots
-\end{itemize}
-
-\subsection*{Esempio 3}
-\begin{itemize}
-    \item \textbf{Input}: 5 acquedotti, 6 tubazioni, partenza da S=0, arrivo a T=4.
-    \item \textbf{Output}: \ldots
-\end{itemize}
-
-\section{Complessità di tempo e spazio}
-L'algoritmo di Dijkstra ha una complessità temporale di $O((V+E)\log V)$, dove $V$ è 
-il numero di acquedotti e $E$ è il numero di tubi. 
-Questo è dovuto all'uso della coda con priorità (min-heap) per selezionare il nodo 
-con il peso minore in ogni iterazione. \\
-
-In termini di complessità spaziale, il grafo è rappresentato con una lista 
-di adiacenza che occupa $O(V+E)$. La coda con priorità memorizza fino a $V$ nodi, 
-il che porta la complessità spaziale complessiva a $O(V+E)$. 
-Questa complessità è ottimale per il problema, dato il limite 
-sugli acquedotti ($n \leq 200$) e sui tubi ($m \leq 5000$).
-
-\section{Strutture dati utilizzate}
-Per rappresentare il grafo, abbiamo utilizzato due possibili rappresentazioni:
-\begin{itemize}
-    \item \textbf{Lista di adiacenza}: Questa struttura è stata utilizzata per ridurre lo spazio necessario per grafi sparsi. Permette di memorizzare efficientemente i vicini di ogni nodo e le loro perdite associate.
-    \item \textbf{Matrice di adiacenza}: Utilizzata per rappresentare grafi più densi, anche se meno efficiente in termini di spazio.
-\end{itemize}
-
-Per la gestione della selezione del nodo successivo con la minima distanza, è stata 
-utilizzata una \textbf{coda con priorità} implementata come min-heap, che permette 
-l'accesso al nodo con il peso minore in tempo $O(\log V)$. Questo garantisce che 
-l'algoritmo funzioni in modo efficiente anche con un numero elevato di nodi.
-
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.4\textwidth]{Images/graph1.png}
+    \caption{Grafo 1.}
+    \label{fig:grafo1}
+\end{figure}
 
 \begin{table}[H]
     \centering
@@ -279,7 +258,23 @@ l'algoritmo funzioni in modo efficiente anche con un numero elevato di nodi.
         \bottomrule
     \end{tabular}
     \caption{Esecuzione del algoritmo di Dijkstra per il nodo 0 sul grafo 1}
+    \label{tab:Tgrafo1}
 \end{table}
+
+\clearpage
+\subsection*{Esempio 2}
+\begin{itemize}
+    \item \textbf{Input}: 7 acquedotti, 8 tubazioni, partenza da S=0, arrivo a T=6.
+    
+    \item \textbf{Output}: La minima perdita da 0 a 6 è $19ml/s$.
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.4\textwidth]{Images/graph2.png}
+    \caption{Grafo 2.}
+    \label{fig:grafo2}
+\end{figure}
 
 \begin{table}[H]
     \centering
@@ -299,6 +294,20 @@ l'algoritmo funzioni in modo efficiente anche con un numero elevato di nodi.
     \end{tabular}
     \caption{Esecuzione del algoritmo di Dijkstra per il nodo 0 sul grafo 2}
 \end{table}
+
+\clearpage
+\subsection*{Esempio 3}
+\begin{itemize}
+    \item \textbf{Input}: 9 acquedotti, 14 tubazioni, partenza da S=0, arrivo a T=8.
+    \item \textbf{Output}: La minima perdita da 0 a 8 è $14ml/s$.
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.4\textwidth]{Images/graph3.png}
+    \caption{Grafo 3.}
+    \label{fig:grafo3}
+\end{figure}
 
 \begin{table}[H]
     \centering
@@ -322,6 +331,60 @@ l'algoritmo funzioni in modo efficiente anche con un numero elevato di nodi.
     }
     \caption{Esecuzione dell'algoritmo di Dijkstra per il nodo 0 sul grafo 3.}
 \end{table}
+
+\clearpage
+
+\section{Complessità di tempo e spazio}
+La complessità temporale dell'algoritmo di Dijkstra dipende dall'implementazione della
+coda a priorità, che in questo caso è fatta tramite \textbf{Heap binario}, e dal numero 
+di archi e di vertici del grafo.\\
+
+\begin{enumerate}
+    \item \textbf{Operazioni sulla coda di priorità}: 
+    \begin{itemize}
+        \item textbf{Inserimento}: l'inserimento di nuovi elementi nell'heap binario ha
+        un costo di $\mathcal{O}(\log{V})$ necessario per mantenere l'ordinamento.
+        \item \textbf{Estrazione del minimo}: l'estrazione del nodo con la distanza minima 
+        ha anch'essa complessità $\mathcal{O}(\log{V})$, poichè a struttura deve essere aggiornata.
+    \end{itemize}
+
+    \item \textbf{Esplorazione del grafo}:
+    \begin{itemize}
+        \item Dijkstra visita ogni nodo una volta, quindi esegue al massimo $V$ operazini di pop
+        dalla coda. Inoltre esamina ogni arco una volta per aggiornare le distanze.
+        Ogni arco comporta un'operazione di push o un aggiornamento di un nodo nella coda. 
+        Poiché l'inserimento e l'aggiornamento nella coda di priorità hanno complessità 
+        $\mathcal{O}(\log{V})$, e ci sono $E$ archi, in totale eseguiamo $E$ operazioni 
+        di push.
+    \end{itemize}
+\end{enumerate}
+
+Riassumendo, si ha in totale na complessità temporale di $\mathcal{O}(E + V \log{V})$.
+
+In termini di complessità spaziale, il grafo è rappresentato con una lista 
+di adiacenza che occupa $O(V+E)$. La coda con priorità memorizza fino a $V$ nodi, 
+il che porta la complessità spaziale complessiva a $O(V+E)$. 
+Questa complessità è ottimale per il problema, dato il limite 
+sugli acquedotti ($n \leq 200$) e sui tubi ($m \leq 5000$).
+
+\section{Strutture dati utilizzate}
+Per rappresentare il grafo, ho utilizzato due possibili rappresentazioni:
+\begin{itemize}
+    \item \textbf{Lista di adiacenza}: Questa struttura è stata utilizzata per ridurre lo spazio necessario per grafi sparsi. Permette di memorizzare efficientemente i vicini di ogni nodo e le loro perdite associate.
+    \item \textbf{Matrice di adiacenza}: Utilizzata per rappresentare grafi più densi, anche se meno efficiente in termini di spazio.
+\end{itemize}
+
+Per la gestione della selezione del nodo successivo con la minima distanza, è stata 
+utilizzata una \textbf{coda con priorità} implementata come min-heap, che permette 
+l'accesso al nodo con il peso minore in tempo $O(\log V)$. Questo garantisce che 
+l'algoritmo funzioni in modo efficiente anche con un numero elevato di nodi.
+
+
+
+
+
+
+
 
 
 \end{document}

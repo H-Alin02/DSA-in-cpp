@@ -4,7 +4,7 @@
 #include <iostream>
 #define GraphType AdjListWeightedGraph<int> // o AdjMatWeightedGraph<int>
 
-GraphType getInputData(string path);
+GraphType getInputData(string path, int& source, int& destinazione);
 
 int main() {
 
@@ -14,13 +14,13 @@ int main() {
     for(int i = 1; i <= 3; i++){
 
         // Crea un grafo pesato rappresentato da lista di adiacenze e lo inizializza con i dati di input
-        GraphType graph = getInputData("inputs/input" + to_string(i) + ".txt");
+        GraphType graph = getInputData("inputs/input" + to_string(i) + ".txt", source, destinazione);
         cout << "Grafo " << i << ": " << endl;
         graph.print();
 
         // Leggi il nodo di partenza e di arrivo
-        cout << "Inserisci il nodo di partenza e di arrivo, per il grafo " << i << " : ";
-        cin >> source >> destinazione;
+        //cout << "Inserisci il nodo di partenza e di arrivo, per il grafo " << i << " : ";
+        // cin >> source >> destinazione;
 
         // si applica l'algoritmo di Dijkstra e si stampa a console la soluzione
         result = GraphAlgorithms<int, GraphType>::dijkstra(source,destinazione,graph);
@@ -41,10 +41,9 @@ int main() {
     return 0;
 }
 
-GraphType getInputData(string path) {
+GraphType getInputData(string path, int& source, int& destinazione) {
 
-    int acquedotti, tubi, souce, destinazione;
-
+    int acquedotti, tubi;
     ifstream infile(path); 
     if(!infile){
         cerr << "Error opening file" << endl;
@@ -52,10 +51,10 @@ GraphType getInputData(string path) {
     }
 
     // Leggi il numero di vertici, archi e nodi di partenza e di arrivo
-    infile >> acquedotti >> tubi >> souce >> destinazione;
+    infile >> acquedotti >> tubi >> source >> destinazione;
     
     // Controllo sulla correttezza dell'input
-    if(souce < 0 || souce >= acquedotti || destinazione < 0 || destinazione >= acquedotti){
+    if(source < 0 || source >= acquedotti || destinazione < 0 || destinazione >= acquedotti){
         throw out_of_range("Invalid start or end node");
     }
     if(acquedotti < 2 || acquedotti > 200 || tubi < 0 || tubi > 5000){
