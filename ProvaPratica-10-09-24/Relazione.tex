@@ -85,53 +85,143 @@
 \clearpage
 
 \section{Soluzione proposta}
-Il progetto richiede di minimizzare la perdita d'acqua nel trasporto tra acquedotti, 
+Il progetto richiede la minimizzazione della perdita d'acqua nel trasporto tra acquedotti, 
 modellando la rete idrica come un grafo pesato dove i nodi rappresentano gli acquedotti 
 e i lati bidirezionali rappresentano le tubazioni con un determinato livello di perdita 
-d'acqua espressa in millilitri al secondo. \\
+d'acqua misurata in millilitri al secondo. \\
 
 Il problema principale sta nel voler calcolare i millilitri al secondo che vengono persi 
 lungo una sequenza di tubi, da un certo acquedoto S ad un
 altro acquedoto T, individuando la minor perdita possibile.\\
 
 Per risolvere il problema, ho scelto di applicare l'algoritmo di Dijkstra, 
-che è particolarmente adatto per trovare il percorso minimo in termini di peso,
+che è particolarmente adatto a determinare il percorso con costo minimo in termini di peso,
 da un vertice S detto ``sorgente'' ad un vertice T detto ``destinazione'', 
 purché i pesi degli archi siano non negativi.\\
 
-\subsection{Algoritmi e codici utilizzati}
-Durante lo svolgimento del corso, mi è stato molto utile creare una repository GitHub
-con diverse implementazioni di algoritmi e strutture dati. 
-Per il completamento del progetto ho utilizzato alcuni algoritmi e strutture dati
-da me stesso implementate, tra cui l'algoritmo di Dijkstra, la classe WeightedGraph,
-la classe Heap.
+\subsection{Algoritmi e codice utilizzati}
+Durante lo svolgimento del corso, ho creato una repository GitHub in cui ho raccolto 
+diverse implementazioni di algoritmi e strutture dati. Questa raccolta mi è stata 
+particolarmente utile per il completamento del progetto, in cui ho riutilizzato e 
+adattato alcune delle implementazioni, tra cui:
 
-Il codice sorgente completo può essere consultato al seguente link:
+\begin{itemize}
+    \item \texttt{WeightedGraph}, una classe per la gestione di grafi pesati, 
+    implementata sia tramite liste di adiacenza, che matrici di adiacenza.
+    \item L'algoritmo di \textbf{Dijkstra} che calcola il percorso minimo in un 
+    grafo pesato, è stato implementato nella classe \texttt{GraphAlgorithms}.
+    \item \texttt{Heap}, una classe per la gestione della coda di priorità, utilizzata 
+    all'interno dell'algoritmo di Dijkstra per mantenere traccia dei nodi da processare.
+\end{itemize}
+
+Il codice sorgente completo è disponibile al seguente link:
 
 \begin{quote}
     \url{https://github.com/H-Alin02/DSA-in-cpp}
 \end{quote}
 
-All'interno del progetto, ho riutilizzato alcune classi precedentemente sviluppate 
-per la gestione di grafi pesati e l'implementazione di algoritmi sui grafi. 
-In particolare, ho utilizzato:
+All'interno del progetto, ho sviluppato un file \texttt{ProvaPratica.cpp}, che contiene il 
+\textit{main} del programma e gestisce l'interazione con i file di input e output. 
+In particolare, utilizzo la funzione 
+\texttt{GraphType getInputData (string path, int\& source, int\& destination)} 
+per caricare i dati da un file di testo.
 
+Il file di input contiene:
 \begin{itemize}
-    \item La classe \texttt{WeightedGraph} gestisce la struttura dati del 
-    \textbf{grafo pesato}, che viene implementata tramite lista di adiacenza o 
-    matrice di adiacenza. 
-
-    \item L'algoritmo di \textbf{Dijkstra} per il calcolo del percorso minimo tra nodi 
-    in un grafo pesato, che è stato implementato nella classe \texttt{GraphAlgorithms}.
+    \item Il numero $n$ di acquedotti ($2 \leq n \leq 200$);
+    \item Il numero $m$ di tubi ($0 \leq m \leq 5000$);
+    \item Gli acquedotti $S$ e $T$ di partenza e arrivo ($1 \leq S, T < n$);
+    \item Le successive $m$ righe contengono tre valori: due numeri di acquedotti collegati 
+    da un tubo e la perdita d'acqua $p$ (in millilitri al secondo), con $0 \leq p \leq 1000$, 
+    del tubo bidirezionale che li connette.
 \end{itemize}
+
+Il file di output conterrà la perdita d'acqua minima, in millilitri al secondo, tra gli acquedotti $S$ e $T$.
+
+Di seguito, mostro il codice del \textit{main} e della funzione \texttt{getInputData}.
+
+\begin{lstlisting}[language=c++, label=main]
+int main() {
+    int source, destination, result;
+
+    // Crea 3 grafi di testing e li inizializza con i dati di input
+    for (int i = 1; i <= 3; i++) {
+        // Crea un grafo pesato rappresentato da liste di adiacenza 
+        // e lo inizializza con i dati di input
+        GraphType graph = getInputData("inputs/input" + to_string(i) + ".txt", source, destination);
+        cout << "Grafo " << i << ": " << endl;
+        graph.print();
+
+        // Applica l'algoritmo di Dijkstra e stampa a console la soluzione
+        result = GraphAlgorithms<int, GraphType>::dijkstra(source, destination, graph);
+        cout << "Dijkstra da " << source << " a " << destination << ": " << result << " ml/s\n\n";
+
+        // Scrivi il risultato su un file di output
+        ofstream outfile("outputs/output" + to_string(i) + ".txt");
+        if (!outfile) {
+            cerr << "Errore nell'apertura del file di output" << endl;
+            return 1;
+        }
+
+        outfile << "Dijkstra da " << source << " a " << destination << ": " << result << " ml/s" << endl;
+
+        // Chiudi il file di output
+        outfile.close();
+    }
+
+    return 0;
+}
+\end{lstlisting}
+
+\clearpage
+
+\begin{lstlisting}[language=c++, label=getInputData]
+GraphType getInputData(string path, int& source, int& destination) {
+    int acquedotti, tubi;
+
+    // Apre il file di input
+    ifstream infile(path); 
+    if (!infile) {
+        cerr << "Errore nell'apertura del file di input" << endl;
+        exit(1);
+    }
+
+    // Legge il numero di acquedotti, tubi, e i nodi di partenza e destinazione
+    infile >> acquedotti >> tubi >> source >> destination;
+
+    // Controlla che i valori siano validi
+    if (source < 0 || source >= acquedotti || destination < 0 || destination >= acquedotti) {
+        throw out_of_range("Nodo di partenza o destinazione non valido");
+    }
+    if (acquedotti < 2 || acquedotti > 200 || tubi < 0 || tubi > 5000) {
+        throw out_of_range("Numero di acquedotti o tubi non valido");
+    }
+
+    // Crea il grafo pesato
+    GraphType graph(acquedotti);
+
+    // Aggiunge i tubi al grafo
+    int x, y;
+    double z;
+    for (int i = 0; i < tubi; ++i) {
+        infile >> x >> y >> z;
+        if (z < 0 || z > 1000) {
+            throw out_of_range("Perdita non valida");
+        }
+        graph.insert(x, y, z); // Inserisce l'arco pesato
+    }
+
+    infile.close();
+
+    return graph;
+}
+\end{lstlisting}
+
+\clearpage
 
 \subsection{Algoritmo di Dijkstra}
 
-L'algoritmo di Dijkstra per il calcolo del percorso minimo è stato implementato nella 
-classe \texttt{GraphAlgorithms}. 
-Di seguito è riportata una versione dell'algoritmo: 
-
-\clearpage
+L'algoritmo di Dijkstra per il calcolo del percorso minimo è riportato di seguito:  
 
 \begin{lstlisting}[language=c++, label=Dijkstra]
     // Dijkstra implementation to find the shortest path from start to destination
@@ -178,20 +268,7 @@ Di seguito è riportata una versione dell'algoritmo:
 
 \end{lstlisting}
 
-L'algoritmo utilizza una \textbf{coda di priorità} (Min-Heap) per estrarre il nodo con 
-la distanza minore e aggiornare le distanze per i nodi adiacenti. Il codice gestisce sia grafi 
-con lista di adiacenza che grafi pesati.\\
-
-Nel contesto del progetto attuale, queste classi sono state riutilizzate per 
-implementare una serie di funzionalità, tra cui il calcolo dei percorsi minimi tra 
-i nodi e la visualizzazione di grafi pesati. Il riuso del codice ha consentito una 
-notevole riduzione della complessità, poiché le classi e gli algoritmi erano già 
-testati e ottimizzati.\\
-
-Le implementazioni sono state facilmente adattate alle specifiche del progetto, 
-permettendo l'integrazione efficiente di funzionalità come la gestione di grafi con 
-pesi variabili e l'esecuzione di algoritmi di ricerca del percorso minimo.
-
+\clearpage
 
 \section{Correttezza dell'algoritmo}
 
@@ -229,7 +306,7 @@ confrontandolo con il suo Pseudocodice originale:
 \section{Alcuni esempi di esecuzione}
 Di seguito vengono riportati alcuni esempi di esecuzione dell'algoritmo su piccoli grafi.
 
-\subsection*{Esempio 1}
+\subsection{Esempio 1}
 \begin{itemize}
     \item \textbf{Input}: 5 acquedotti, 7 tubazioni, partenza da S=0, arrivo a T=4.  
     \item \textbf{Output}: La minima perdita da 0 a 4 è $9ml/s$.
@@ -248,8 +325,8 @@ Di seguito vengono riportati alcuni esempi di esecuzione dell'algoritmo su picco
         \textbf{Iteration} & \textbf{S} & \textbf{w} & \textbf{D[w]} &
         \textbf{D[1]} & \textbf{D[2]} & \textbf{D[3]} & \textbf{D[4]} \\
         \midrule
-        Initial & {0} & - & - & 2 & +\infty & +\infty & 10 \\
-        1 & {0,1} & 1 & 2 & 2 & 5 & +\infty & 9 \\
+        Initial & {0} & $-$ & $-$ & 2 & +$\infty$ & +$\infty$ & 10 \\
+        1 & {0,1} & 1 & 2 & 2 & 5 & +$\infty$ & 9 \\
         2 & {0,1,2} & 2 & 5 & 2 & 5 & 9 & 9 \\
         3 & {0,1,2,3} & 3 & 9 & 2 & 5 & 9 & 9 \\
         4 & All & 4 & 9 & 2 & 5 & 9 & 9 \\
@@ -259,7 +336,7 @@ Di seguito vengono riportati alcuni esempi di esecuzione dell'algoritmo su picco
 \end{table}
 
 \clearpage
-\subsection*{Esempio 2}
+\subsection{Esempio 2}
 \begin{itemize}
     \item \textbf{Input}: 7 acquedotti, 8 tubazioni, partenza da S=0, arrivo a T=6.
     
@@ -280,10 +357,10 @@ Di seguito vengono riportati alcuni esempi di esecuzione dell'algoritmo su picco
         \textbf{D[1]} & \textbf{D[2]} & \textbf{D[3]} & \textbf{D[4]} &
         \textbf{D[5]} & \textbf{D[6]} \\
         \midrule
-        Initial & 0 & - & - & 2 & 6 & +\infty & +\infty & +\infty & +\infty \\
-        1 & {0,1} & 1 & 2 & 2 & 6 & 7 & +\infty & +\infty & +\infty \\
-        2 & {0,1,2} & 2 & 6 & 2 & 6 & 7 & +\infty & +\infty & +\infty \\
-        3 & {0,1,2,3} & 3 & 7 & 2 & 6 & 7 & 17 & 22 & +\infty \\
+        Initial & 0 & $-$ & $-$ & 2 & 6 & +$\infty$ & +$\infty$ & +$\infty$ & +$\infty$ \\
+        1 & {0,1} & 1 & 2 & 2 & 6 & 7 & +$\infty$ & +$\infty$ & +$\infty$ \\
+        2 & {0,1,2} & 2 & 6 & 2 & 6 & 7 & +$\infty$ & +$\infty$ & +$\infty$ \\
+        3 & {0,1,2,3} & 3 & 7 & 2 & 6 & 7 & 17 & 22 & +$\infty$ \\
         4 & {0,1,2,3,4} & 4 & 17 & 2 & 6 & 7 & 17 & 22 & 19 \\
         5 & All & 6 & 19 & 2 & 6 & 7 & 17 & 22 & 19 \\
         \bottomrule
@@ -292,7 +369,7 @@ Di seguito vengono riportati alcuni esempi di esecuzione dell'algoritmo su picco
 \end{table}
 
 \clearpage
-\subsection*{Esempio 3}
+\subsection{Esempio 3}
 \begin{itemize}
     \item \textbf{Input}: 9 acquedotti, 14 tubazioni, partenza da S=0, arrivo a T=8.
     \item \textbf{Output}: La minima perdita da 0 a 8 è $14ml/s$.
@@ -313,10 +390,10 @@ Di seguito vengono riportati alcuni esempi di esecuzione dell'algoritmo su picco
         \textbf{D[1]} & \textbf{D[2]} & \textbf{D[3]} & \textbf{D[4]} & 
         \textbf{D[5]} & \textbf{D[6]} & \textbf{D[7]} & \textbf{D[8]} \\
         \midrule
-        Initial & 0 & - & - & 4 & +\infty & +\infty & +\infty & +\infty & +\infty & 8 & +\infty \\
-        1 & {0,1} & 1 & 4 & 4 & 12 & +\infty & +\infty & +\infty & +\infty & 8 & +\infty \\
-        2 & {0,1,7} & 7 & 8 & 4 & 12 & +\infty & +\infty & +\infty & 9 & 8 & 15 \\
-        3 & {0,1,7,6} & 6 & 9 & 4 & 12 & +\infty & +\infty & 11 & 9 & 8 & 15 \\
+        Initial & 0 & $-$ & $-$ & 4 & +$\infty$ & +$\infty$ & +$\infty$ & +$\infty$ & +$\infty$ & 8 & +$\infty$ \\
+        1 & {0,1} & 1 & 4 & 4 & 12 & +$\infty$ & +$\infty$ & +$\infty$ & +$\infty$ & 8 & +$\infty$ \\
+        2 & {0,1,7} & 7 & 8 & 4 & 12 & +$\infty$ & +$\infty$ & +$\infty$ & 9 & 8 & 15 \\
+        3 & {0,1,7,6} & 6 & 9 & 4 & 12 & +$\infty$ & +$\infty$ & 11 & 9 & 8 & 15 \\
         4 & {0,1,7,6,5} & 5 & 11 & 4 & 12 & 25 & 21& 11 & 9 & 8 & 15 \\
         5 & {0,1,7,6,5,2} & 2 & 12 & 4 & 12 & 19 & 21& 11 & 9 & 8 & 14 \\
         6 & {0,1,7,6,5,2,8} & 8 & 14 & 4 & 12 & 19 & 21& 11 & 9 & 8 & 14 \\
@@ -330,37 +407,54 @@ Di seguito vengono riportati alcuni esempi di esecuzione dell'algoritmo su picco
 \clearpage
 
 \section{Complessità di tempo e spazio}
-La complessità temporale dell'algoritmo di Dijkstra dipende dall'implementazione della
-coda a priorità, che in questo caso è fatta tramite \textbf{Heap binario}, e dal numero 
-di archi e di vertici del grafo.\\
 
-\begin{enumerate}
+La complessità temporale dell'algoritmo di Dijkstra dipende dall'implementazione della 
+coda a priorità, che in questo caso è realizzata tramite un \textbf{heap binario}, 
+e dal numero di vertici ($V$) e archi ($E$) del grafo.
+
+\begin{enumerate} 
     \item \textbf{Operazioni sulla coda di priorità}: 
-    \begin{itemize}
-        \item textbf{Inserimento}: l'inserimento di nuovi elementi nell'heap binario ha
-        un costo di $\mathcal{O}(\log{V})$ necessario per mantenere l'ordinamento.
-        \item \textbf{Estrazione del minimo}: l'estrazione del nodo con la distanza minima 
-        ha anch'essa complessità $\mathcal{O}(\log{V})$, poichè a struttura deve essere aggiornata.
+    \begin{itemize} 
+        \item \textbf{Inserimento}: l'inserimento di un nuovo elemento 
+        nell'heap binario ha un costo di $\mathcal{O}(\log V)$, poiché è 
+        necessario mantenere l'ordinamento della struttura. 
+        \item \textbf{Estrazione del minimo}: l'estrazione del nodo con 
+        la distanza minima ha una complessità di $\mathcal{O}(\log V)$, 
+        in quanto anche in questo caso l'heap deve essere riorganizzato per 
+        preservare la proprietà di ordinamento. 
     \end{itemize}
 
     \item \textbf{Esplorazione del grafo}:
     \begin{itemize}
-        \item Dijkstra visita ogni nodo una volta, quindi esegue al massimo $V$ operazini di pop
-        dalla coda. Inoltre esamina ogni arco una volta per aggiornare le distanze.
-        Ogni arco comporta un'operazione di push o un aggiornamento di un nodo nella coda. 
-        Poiché l'inserimento e l'aggiornamento nella coda di priorità hanno complessità 
-        $\mathcal{O}(\log{V})$, e ci sono $E$ archi, in totale eseguiamo $E$ operazioni 
-        di push.
+        \item L'algoritmo di Dijkstra visita ogni nodo una sola volta, 
+        eseguendo al massimo $V$ operazioni di estrazione (\textit{pop}) dalla coda 
+        a priorità. Inoltre, esplora ogni arco del grafo esattamente una volta per 
+        verificare se la distanza dei nodi adiacenti deve essere aggiornata.
+        \item Ogni aggiornamento di distanza richiede un'inserzione o un'operazione 
+        di riduzione della chiave nella coda a priorità, operazioni che entrambe 
+        hanno una complessità di $\mathcal{O}(\log V)$. Considerando che ci sono $E$ 
+        archi, in totale si eseguono al massimo $E$ operazioni di inserimento o 
+        aggiornamento nell'heap.
     \end{itemize}
 \end{enumerate}
 
-Riassumendo, si ha in totale na complessità temporale di $\mathcal{O}(E + V \log{V})$.
+In sintesi, la complessità temporale complessiva dell'algoritmo di Dijkstra, 
+utilizzando un heap binario, è $\mathcal{O}(E \log V + V \log V)$, che si può 
+esprimere come $\mathcal{O}((E + V) \log V)$.\\
 
-In termini di complessità spaziale, il grafo è rappresentato con una lista 
-di adiacenza che occupa $O(V+E)$. La coda con priorità memorizza fino a $V$ nodi, 
-il che porta la complessità spaziale complessiva a $O(V+E)$. 
-Questa complessità è ottimale per il problema, dato il limite 
-sugli acquedotti ($n \leq 200$) e sui tubi ($m \leq 5000$).
+\textbf{Complessità spaziale}: Il grafo può essere rappresentato mediante una lista di 
+adiacenza, occupando spazio $\mathcal{O}(V + E)$, oppure tramite matrice di adicenza, 
+occupando spazio $\mathcal{O}(V^2)$. 
+La coda a priorità contiene al massimo $V$ elementi, quindi anch'essa 
+richiede spazio $\mathcal{O}(V)$. 
+Pertanto, la complessità spaziale complessiva dipende dal tipo di rappresentazione 
+che si sceglie di usare. 
+
+Considerando i limiti sui dati di input (con $n \leq 200$ acquedotti e $m \leq 5000$ tubi), 
+sarebbe consigliabile utilizzare la rappresentazione 
+tramite lista di adiacenza.
+
+\clearpage
 
 \section{Strutture dati utilizzate}
 Per rappresentare il grafo, ho utilizzato due possibili rappresentazioni:

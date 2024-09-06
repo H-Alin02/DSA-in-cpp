@@ -18,10 +18,6 @@ int main() {
         cout << "Grafo " << i << ": " << endl;
         graph.print();
 
-        // Leggi il nodo di partenza e di arrivo
-        //cout << "Inserisci il nodo di partenza e di arrivo, per il grafo " << i << " : ";
-        // cin >> source >> destinazione;
-
         // si applica l'algoritmo di Dijkstra e si stampa a console la soluzione
         result = GraphAlgorithms<int, GraphType>::dijkstra(source,destinazione,graph);
         cout << "Dijstra from " << source << " to " << destinazione << ": "<< result << "\n\n";
